@@ -4,17 +4,80 @@ This document provides detailed information about all the libraries and modules 
 
 ---
 
-## 🔷 Foundation: Understanding HTTP Request and Response Structure
+## Table of Contents
+
+### Foundation
+- **0. Foundation: Understanding HTTP Request and Response Structure**
+  - 0.1. HTTP Request Structure
+  - 0.2. HTTP Response Structure
+  - 0.3. Understanding Content-Type
+  - 0.4. Understanding Authorization
+  - 0.5. Request Object in Express (`req`)
+  - 0.6. Response Object in Express (`res`)
+  - 0.7. Quick Reference: Request vs Response
+  - 0.8. How Libraries Use This Structure
+  - 0.9. Understanding package.json
+
+### External Libraries
+- **1. Express**
+  - 1.1. App.use() - Understanding Express Middleware
+- **2. MySQL2 (Promise-based)**
+  - 2.0. Connection Methods: Pool vs Single Connection
+  - 2.1. Step 1: Create Connection Pool (`createPool`)
+  - 2.2. Step 2: Get Connection from Pool (`getConnection`)
+  - 2.3. Step 3: Execute Queries (`query` or `execute`)
+  - 2.4. Day-to-Day Query Patterns
+  - 2.5. Error Handling Pattern
+  - 2.6. Transactions (Using getConnection)
+  - 2.7. Complete Real-World Example (Your Pattern)
+  - 2.8. Quick Reference: Methods You'll Use Daily
+- **3. Dotenv**
+- **4. CORS**
+- **5. Multer**
+  - 5.1. Understanding File Upload Request Structure
+  - 5.2. Understanding Callback Parameters: `(req, file, cb)`
+  - 5.3. Multer Methods
+  - 5.4. Multer Configuration Options
+  - 5.5. Request Object Structure After Multer
+  - 5.6. How File Storage Works: Disk vs Database
+  - 5.7. File Upload Security: Critical Best Practices
+    - 5.7.1. Security Best Practices
+    - 5.7.2. Secure Implementation Example
+    - 5.7.3. Security Checklist
+    - 5.7.4. Common Attack Vectors and Prevention
+    - 5.7.5. Quick Security Fixes for Your Current Code
+  - 5.8. Complete Real-World Example
+- **10. Express Rate Limit**
+
+### Built-in Node.js Modules
+- **6. Path (Node.js Built-in)**
+- **7. FS (Node.js Built-in)**
+- **8. OS (Node.js Built-in)**
+- **9. HTTP (Node.js Built-in)**
+
+### Express Built-in Middleware
+- **11. Express.json() and Body Parser Relationship**
+- **12. Express.urlencoded() - Understanding URL-Encoded Form Data**
+- **13. Express.static() - Serving Static Files**
+- **14. Body Parser (Deprecated)**
+
+---
+
+**Note:** Sections are organized by category for easier navigation. The numbering (0-14) follows the order of appearance in the document.
+
+---
+
+## 0. Foundation: Understanding HTTP Request and Response Structure
 
 Before diving into specific libraries, it's essential to understand the fundamental structure of HTTP requests and responses. This knowledge is the foundation for understanding how Express, multer, and other middleware work.
 
 ---
 
-## HTTP Request Structure
+### 0.1. HTTP Request Structure
 
 An HTTP request consists of several parts that work together to send data from client to server.
 
-### 1. Request Line (Start Line)
+#### 1. Request Line (Start Line)
 
 **Format:**
 ```
@@ -35,7 +98,7 @@ DELETE /api/users/123 HTTP/1.1
 - **Query String:** Optional parameters after `?` (e.g., `?id=123&name=John`)
 - **HTTP Version:** Usually `HTTP/1.1` or `HTTP/2`
 
-### 2. Request Headers
+#### 2. Request Headers
 
 Headers provide metadata about the request. They are key-value pairs.
 
@@ -109,7 +172,7 @@ X-Custom-Header: custom-value
 X-Client-Version: 1.0.0
 ```
 
-### 3. Request Body
+#### 3. Request Body
 
 The body contains the actual data being sent. **Not all requests have a body** (GET requests typically don't).
 
@@ -156,7 +219,7 @@ This is plain text content
 </user>
 ```
 
-### Complete Request Example
+#### Complete Request Example
 
 **GET Request (No Body):**
 ```http
@@ -204,11 +267,11 @@ Content-Type: image/jpeg
 
 ---
 
-## HTTP Response Structure
+### 0.2. HTTP Response Structure
 
 An HTTP response contains the server's reply to the client's request.
 
-### 1. Status Line
+#### 1. Status Line
 
 **Format:**
 ```
@@ -234,7 +297,7 @@ HTTP/1.1 404 Not Found
 HTTP/1.1 500 Internal Server Error
 ```
 
-### 2. Response Headers
+#### 2. Response Headers
 
 Similar to request headers, but sent by the server.
 
@@ -307,7 +370,7 @@ X-Response-Time: 123ms
 X-Custom-Header: custom-value
 ```
 
-### 3. Response Body
+#### 3. Response Body
 
 The actual data returned to the client.
 
@@ -352,7 +415,7 @@ Success: User created
 }
 ```
 
-### Complete Response Example
+#### Complete Response Example
 
 **Success Response (JSON):**
 ```http
@@ -396,11 +459,11 @@ Cache-Control: public, max-age=31536000
 
 ---
 
-## Understanding Content-Type
+### 0.3. Understanding Content-Type
 
 Content-Type is crucial for determining how to parse request/response data.
 
-### Request Content-Types
+#### Request Content-Types
 
 | Content-Type | Use Case | Example |
 |-------------|----------|---------|
@@ -410,7 +473,7 @@ Content-Type is crucial for determining how to parse request/response data.
 | `text/plain` | Plain text | `Hello World` |
 | `application/xml` | XML data | `<user><name>John</name></user>` |
 
-### Response Content-Types
+#### Response Content-Types
 
 | Content-Type | Use Case | Example |
 |-------------|----------|---------|
@@ -423,11 +486,11 @@ Content-Type is crucial for determining how to parse request/response data.
 
 ---
 
-## Understanding Authorization
+### 0.4. Understanding Authorization
 
 Authorization headers authenticate requests.
 
-### Bearer Token (JWT)
+#### Bearer Token (JWT)
 ```
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
@@ -445,7 +508,7 @@ fetch('/api/data', {
 const token = req.headers.authorization?.split(' ')[1];
 ```
 
-### Basic Authentication
+#### Basic Authentication
 ```
 Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ=
 ```
@@ -457,7 +520,7 @@ const credentials = Buffer.from('username:password').toString('base64');
 // Result: dXNlcm5hbWU6cGFzc3dvcmQ=
 ```
 
-### API Key
+#### API Key
 ```
 Authorization: ApiKey your-api-key-here
 X-API-Key: your-api-key-here
@@ -465,7 +528,7 @@ X-API-Key: your-api-key-here
 
 ---
 
-## Request Object in Express (`req`)
+### 0.5. Request Object in Express (`req`)
 
 When Express receives a request, it creates a `req` object containing:
 
@@ -521,7 +584,7 @@ req.protocol             // http or https
 
 ---
 
-## Response Object in Express (`res`)
+### 0.6. Response Object in Express (`res`)
 
 The `res` object is used to send responses:
 
@@ -567,7 +630,7 @@ res.sendFile('/path/to/file.pdf');
 
 ---
 
-## Quick Reference: Request vs Response
+### 0.7. Quick Reference: Request vs Response
 
 | Component | Request | Response |
 |-----------|---------|----------|
@@ -581,7 +644,7 @@ res.sendFile('/path/to/file.pdf');
 
 ---
 
-## How Libraries Use This Structure
+### 0.8. How Libraries Use This Structure
 
 ### Express
 - **Parses headers** to determine content type
@@ -604,6 +667,443 @@ res.sendFile('/path/to/file.pdf');
 ### express.urlencoded()
 - **Checks `Content-Type: application/x-www-form-urlencoded`** header
 - **Parses URL-encoded body** into `req.body`
+
+---
+
+### 0.9. Understanding package.json
+
+**File:** `package.json`  
+**Type:** Configuration File  
+**Purpose:** Project metadata and configuration file for Node.js projects
+
+#### What is package.json?
+
+`package.json` is a JSON file that contains metadata about your Node.js project. It defines:
+- Project name, version, and description
+- Dependencies (packages your project needs)
+- Scripts (commands you can run)
+- Entry point (main file of your application)
+- Module system (CommonJS or ES Modules)
+- And much more
+
+#### Why package.json is Important
+
+- ✅ **Dependency Management:** Lists all packages your project needs
+- ✅ **Project Configuration:** Defines project settings and metadata
+- ✅ **Scripts:** Defines custom commands (start, test, build, etc.)
+- ✅ **Entry Point:** Specifies which file Node.js should run
+- ✅ **Module System:** Determines if you use CommonJS or ES Modules
+- ✅ **Version Control:** Tracks project version and dependencies
+
+#### Basic package.json Structure
+
+```json
+{
+  "name": "my-node-app",
+  "version": "1.0.0",
+  "description": "My Node.js application",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql2": "^3.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
+```
+
+#### The "main" Field - Entry Point Configuration
+
+**Purpose:** Specifies the main entry point of your application
+
+**Default Behavior:**
+- If `package.json` doesn't have a `"main"` field, Node.js looks for:
+  1. `index.js`
+  2. `index.node`
+  3. `index.json`
+- If none found, an error occurs
+
+**Changing the Entry Point:**
+
+```json
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "main": "server.js"  // Changed from default "index.js"
+}
+```
+
+**Real-World Examples:**
+
+**Example 1: Default Entry Point (index.js)**
+```json
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "main": "index.js"  // Explicitly set to index.js
+}
+```
+
+**Example 2: Custom Entry Point**
+```json
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "main": "server.js"  // Custom entry point
+}
+```
+
+**Example 3: Entry Point in Subdirectory**
+```json
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "main": "src/index.js"  // Entry point in src folder
+}
+```
+
+**How It Works:**
+```javascript
+// When someone does: require('my-app')
+// Node.js looks for the file specified in "main" field
+
+// If main is "index.js":
+const myApp = require('my-app');
+// Node.js loads: node_modules/my-app/index.js
+
+// If main is "server.js":
+const myApp = require('my-app');
+// Node.js loads: node_modules/my-app/server.js
+```
+
+#### JavaScript Module Systems: CommonJS vs ES Modules
+
+Node.js supports two different module systems for importing/exporting code.
+
+##### CommonJS (Traditional Node.js Style)
+
+**What it is:** The original module system in Node.js (used by default)
+
+**Syntax:**
+```javascript
+// Exporting (module.exports)
+module.exports = {
+  name: 'John',
+  age: 30
+};
+
+// Or
+exports.name = 'John';
+exports.age = 30;
+
+// Importing (require)
+const user = require('./user.js');
+const express = require('express');
+```
+
+**package.json Configuration:**
+```json
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "main": "index.js"
+  // No "type" field = CommonJS (default)
+}
+```
+
+**File Extension:** `.js` (default)
+
+**Real-World Example:**
+```javascript
+// user.js (CommonJS)
+module.exports = {
+  getName: () => 'John Doe',
+  getAge: () => 30
+};
+
+// index.js (CommonJS)
+const user = require('./user.js');
+console.log(user.getName()); // "John Doe"
+```
+
+##### ES Modules (ES2015/ES6 Modules) - Modern JavaScript
+
+**What it is:** Modern JavaScript module system (standard in browsers, now supported in Node.js)
+
+**Syntax:**
+```javascript
+// Exporting (export)
+export const name = 'John';
+export const age = 30;
+
+// Or default export
+export default {
+  name: 'John',
+  age: 30
+};
+
+// Importing (import)
+import express from 'express';
+import { name, age } from './user.js';
+```
+
+**package.json Configuration:**
+```json
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "type": "module",  // Enable ES Modules
+  "main": "index.js"
+}
+```
+
+**File Extension:** `.js` (with `"type": "module"`) or `.mjs`
+
+**Real-World Example:**
+```javascript
+// user.js (ES Module)
+export const getName = () => 'John Doe';
+export const getAge = () => 30;
+
+// index.js (ES Module)
+import { getName, getAge } from './user.js';
+console.log(getName()); // "John Doe"
+```
+
+#### Comparison: CommonJS vs ES Modules
+
+| Feature | CommonJS | ES Modules |
+|---------|----------|------------|
+| **Syntax** | `require()` / `module.exports` | `import` / `export` |
+| **package.json** | No `"type"` field (default) | `"type": "module"` |
+| **File Extension** | `.js` | `.js` (with type: "module") or `.mjs` |
+| **When Available** | Since Node.js v0.1.0 | Since Node.js v12.0.0 |
+| **Loading** | Synchronous (blocking) | Asynchronous (non-blocking) |
+| **Browser Support** | ❌ No (needs bundler) | ✅ Yes (native) |
+| **Tree Shaking** | ❌ No | ✅ Yes |
+| **Default** | ✅ Yes (Node.js default) | ❌ No (must enable) |
+
+#### Complete package.json Examples
+
+**Example 1: CommonJS Project (Default)**
+```json
+{
+  "name": "my-express-app",
+  "version": "1.0.0",
+  "description": "Express application using CommonJS",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql2": "^3.6.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
+```
+
+**Example 2: ES Modules Project**
+```json
+{
+  "name": "my-express-app",
+  "version": "1.0.0",
+  "description": "Express application using ES Modules",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql2": "^3.6.0"
+  }
+}
+```
+
+**Example 3: Mixed Project (CommonJS with Custom Entry)**
+```json
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
+```
+
+#### Key package.json Fields Explained
+
+**Essential Fields:**
+```json
+{
+  "name": "my-app",              // Package name (required)
+  "version": "1.0.0",            // Version (required)
+  "description": "My app",       // Description
+  "main": "index.js",            // Entry point (important!)
+  "type": "module",              // Module system: "module" or omitted (CommonJS)
+  "scripts": {                   // Custom commands
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {              // Production dependencies
+    "express": "^4.18.2"
+  },
+  "devDependencies": {          // Development dependencies
+    "nodemon": "^2.0.20"
+  },
+  "keywords": ["node", "express"], // Keywords for npm
+  "author": "Your Name",         // Author
+  "license": "ISC"              // License
+}
+```
+
+#### Real-World Scenarios
+
+**Scenario 1: Changing Entry Point from index.js to server.js**
+
+**Before:**
+```json
+{
+  "name": "my-app",
+  "version": "1.0.0"
+  // No "main" field - defaults to index.js
+}
+```
+
+**After:**
+```json
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "main": "server.js"  // Changed entry point
+}
+```
+
+**Result:** When someone runs `node .` or `require('my-app')`, Node.js will look for `server.js` instead of `index.js`.
+
+**Scenario 2: Using ES Modules Instead of CommonJS**
+
+**Before (CommonJS):**
+```json
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "main": "index.js"
+  // No "type" field = CommonJS
+}
+```
+
+```javascript
+// index.js (CommonJS)
+const express = require('express');
+module.exports = express();
+```
+
+**After (ES Modules):**
+```json
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "type": "module",  // Enable ES Modules
+  "main": "index.js"
+}
+```
+
+```javascript
+// index.js (ES Module)
+import express from 'express';
+export default express();
+```
+
+**Scenario 3: Project Structure with Custom Entry Point**
+
+**Directory Structure:**
+```
+my-project/
+  ├── package.json
+  ├── src/
+  │   └── server.js    (main entry point)
+  ├── config/
+  │   └── database.js
+  └── routes/
+      └── api.js
+```
+
+**package.json:**
+```json
+{
+  "name": "my-project",
+  "version": "1.0.0",
+  "main": "src/server.js",  // Custom entry point
+  "scripts": {
+    "start": "node src/server.js"
+  }
+}
+```
+
+#### Important Notes
+
+- ✅ **"main" field is optional** - If omitted, Node.js defaults to `index.js`
+- ✅ **"type" field determines module system** - Omit for CommonJS, add `"type": "module"` for ES Modules
+- ✅ **You can't mix both** in the same project (without special configuration)
+- ✅ **CommonJS is default** - No need to specify anything for CommonJS
+- ✅ **ES Modules require explicit enablement** - Must add `"type": "module"` to package.json
+- ⚠️ **File extensions matter** - ES Modules can use `.mjs` extension without `"type": "module"`
+- ⚠️ **Breaking change** - Changing `"type": "module"` affects ALL `.js` files in your project
+- ⚠️ **Most Node.js projects use CommonJS** - It's the standard and most compatible
+
+#### Quick Reference
+
+**CommonJS (Default):**
+```json
+{
+  "main": "index.js"
+  // No "type" field
+}
+```
+```javascript
+// Use require() and module.exports
+const express = require('express');
+module.exports = app;
+```
+
+**ES Modules:**
+```json
+{
+  "type": "module",
+  "main": "index.js"
+}
+```
+```javascript
+// Use import and export
+import express from 'express';
+export default app;
+```
+
+**Change Entry Point:**
+```json
+{
+  "main": "server.js"  // Change from default index.js
+}
+```
 
 ---
 
@@ -639,7 +1139,7 @@ npm install express
 
 ---
 
-## 1.1. App.use() - Understanding Express Middleware
+### 1.1. App.use() - Understanding Express Middleware
 
 ### What is `app.use()`?
 
@@ -986,7 +1486,7 @@ MySQL2 is a fast MySQL client for Node.js with support for promises and async/aw
 
 ---
 
-## 2.0. Connection Methods: Pool vs Single Connection
+### 2.0. Connection Methods: Pool vs Single Connection
 
 MySQL2 provides two main ways to connect to the database. Understanding the difference is crucial for choosing the right approach.
 
@@ -1436,7 +1936,7 @@ try {
 
 ---
 
-## 2.1. Step 1: Create Connection Pool (`createPool`)
+### 2.1. Step 1: Create Connection Pool (`createPool`)
 
 ### Basic Setup
 
@@ -1508,7 +2008,7 @@ DB_NAME=myapp_db
 
 ---
 
-## 2.2. Step 2: Get Connection from Pool (`getConnection`)
+### 2.2. Step 2: Get Connection from Pool (`getConnection`)
 
 ### When to Use `getConnection()`
 
@@ -1582,7 +2082,7 @@ connection.state          // Connection state
 
 ---
 
-## 2.3. Step 3: Execute Queries (`query` or `execute`)
+### 2.3. Step 3: Execute Queries (`query` or `execute`)
 
 ### Two Ways to Query
 
@@ -1663,7 +2163,7 @@ const exists = rows.length > 0;
 
 ---
 
-## 2.4. Day-to-Day Query Patterns
+### 2.4. Day-to-Day Query Patterns
 
 ### SELECT Queries
 
@@ -1798,7 +2298,7 @@ console.log(rows[0]);              // First row object
 
 ---
 
-## 2.5. Error Handling Pattern
+### 2.5. Error Handling Pattern
 
 ### Try-Catch Pattern (Your Style)
 
@@ -1838,7 +2338,7 @@ try {
 
 ---
 
-## 2.6. Transactions (Using getConnection)
+### 2.6. Transactions (Using getConnection)
 
 **When you need multiple queries to succeed or fail together:**
 
@@ -1878,7 +2378,7 @@ async function transferMoney(fromUserId, toUserId, amount) {
 
 ---
 
-## 2.7. Complete Real-World Example (Your Pattern)
+### 2.7. Complete Real-World Example (Your Pattern)
 
 ```javascript
 const mysql = require("mysql2/promise");
@@ -1952,7 +2452,7 @@ initDatabase();
 
 ---
 
-## 2.8. Quick Reference: Methods You'll Use Daily
+### 2.8. Quick Reference: Methods You'll Use Daily
 
 | Method | When to Use | Example |
 |--------|-------------|---------|
@@ -2073,7 +2573,7 @@ Multer is a middleware for handling `multipart/form-data`, which is primarily us
 
 ---
 
-## 5.1. Understanding File Upload Request Structure
+### 5.1. Understanding File Upload Request Structure
 
 ### What is `multipart/form-data`?
 
@@ -2146,7 +2646,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
 
 ---
 
-## 5.2. Understanding Callback Parameters: `(req, file, cb)`
+### 5.2. Understanding Callback Parameters: `(req, file, cb)`
 
 ### What are these parameters?
 
@@ -2249,7 +2749,7 @@ const storage = multer.diskStorage({
 
 ---
 
-## 5.3. Multer Methods
+### 5.3. Multer Methods
 
 Multer provides different methods to handle various upload scenarios:
 
@@ -2376,7 +2876,7 @@ app.post('/form', upload.none(), (req, res) => {
 
 ---
 
-## 5.4. Multer Configuration Options
+### 5.4. Multer Configuration Options
 
 ### Basic Configuration
 
@@ -2588,7 +3088,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
 
 ---
 
-## 5.5. Request Object Structure After Multer
+### 5.5. Request Object Structure After Multer
 
 ### After `upload.single()`
 
@@ -2635,7 +3135,7 @@ console.log(req.body.username);  // "john"
 
 ---
 
-## 5.6. How File Storage Works: Disk vs Database
+### 5.6. How File Storage Works: Disk vs Database
 
 ### Understanding Your Code: Avatar Upload Flow
 
@@ -2931,7 +3431,7 @@ A: Databases are for structured data. Files should be on disk/file storage. Stor
 
 ---
 
-## 5.7. File Upload Security: Critical Best Practices
+### 5.7. File Upload Security: Critical Best Practices
 
 ### ⚠️ Security Risks in File Uploads
 
@@ -2976,7 +3476,7 @@ filename: (req, file, cb) => {
 
 ---
 
-## 5.7.1. Security Best Practices
+#### 5.7.1. Security Best Practices
 
 ### 1. Filename Sanitization (CRITICAL)
 
@@ -3249,7 +3749,7 @@ app.post('/upload', upload.single('avatar'), async (req, res) => {
 
 ---
 
-## 5.7.2. Secure Implementation Example
+#### 5.7.2. Secure Implementation Example
 
 **✅ Complete Secure File Upload Configuration:**
 
@@ -3349,7 +3849,7 @@ app.post('/api/users',
 
 ---
 
-## 5.7.3. Security Checklist
+#### 5.7.3. Security Checklist
 
 **Before deploying file uploads, ensure:**
 
@@ -3368,7 +3868,7 @@ app.post('/api/users',
 
 ---
 
-## 5.7.4. Common Attack Vectors and Prevention
+#### 5.7.4. Common Attack Vectors and Prevention
 
 ### Attack 1: Path Traversal
 
@@ -3427,7 +3927,7 @@ limits: { fileSize: 5 * 1024 * 1024 }  // 5MB max
 
 ---
 
-## 5.7.5. Quick Security Fixes for Your Current Code
+#### 5.7.5. Quick Security Fixes for Your Current Code
 
 **Immediate improvements you can make:**
 
@@ -3460,7 +3960,7 @@ app.post('/api/users', upload.single('avatar'), async (req, res) => {
 
 ---
 
-## 5.8. Complete Real-World Example
+### 5.8. Complete Real-World Example
 
 **Frontend (HTML + JavaScript):**
 ```html
@@ -3581,20 +4081,602 @@ npm install multer
 **Purpose:** Utilities for working with file and directory paths
 
 ### Description
-The `path` module provides utilities for working with file and directory paths. It's particularly useful for handling path differences between operating systems (Windows uses backslashes, Unix uses forward slashes).
+The `path` module provides utilities for working with file and directory paths. It's particularly useful for handling path differences between operating systems (Windows uses backslashes `\`, Unix/Linux/Mac uses forward slashes `/`). The `path` module automatically handles these differences, making your code cross-platform compatible.
+
+### Why Path Module is Important
+
+**Problem Without Path Module:**
+```javascript
+// ❌ BAD - Hardcoded paths don't work cross-platform
+const filePath = './uploads/file.txt';  // Works on Unix
+const filePath = '.\\uploads\\file.txt'; // Works on Windows
+// Different code needed for different OS!
+```
+
+**Solution With Path Module:**
+```javascript
+// ✅ GOOD - Works on all platforms
+const path = require('path');
+const filePath = path.join(__dirname, 'uploads', 'file.txt');
+// Automatically uses correct separator for current OS
+```
 
 ### Key Methods
-- `path.join()` - Join path segments together
-- `path.resolve()` - Resolve absolute path
-- `path.dirname()` - Get directory name from path
-- `path.basename()` - Get filename from path
-- `path.extname()` - Get file extension
 
-### Common Usage
+These are the **most commonly used methods** in day-to-day development:
+
+- **`path.join()`** - Join path segments together (most used!)
+- **`path.resolve()`** - Resolve absolute path
+- **`path.dirname()`** - Get directory name from path
+- **`path.basename()`** - Get filename from path
+- **`path.extname()`** - Get file extension
+
+**Quick Examples:**
 ```javascript
+const path = require('path');
+
+// Most common: Join paths
 const filePath = path.join(__dirname, 'uploads', 'file.txt');
+
+// Resolve to absolute path
 const absolutePath = path.resolve('./uploads');
+
+// Extract parts of a path
+const dir = path.dirname('/uploads/images/photo.jpg');      // '/uploads/images'
+const filename = path.basename('/uploads/images/photo.jpg'); // 'photo.jpg'
+const ext = path.extname('photo.jpg');                       // '.jpg'
 ```
+
+### Key Methods - Detailed
+
+#### 1. `path.join(...paths)` - Join Path Segments
+
+**Purpose:** Joins path segments together using the platform-specific separator
+
+**Syntax:**
+```javascript
+path.join([...paths])
+```
+
+**Examples:**
+```javascript
+const path = require('path');
+
+// Basic joining
+path.join('uploads', 'images', 'photo.jpg');
+// Unix: 'uploads/images/photo.jpg'
+// Windows: 'uploads\\images\\photo.jpg'
+
+// With __dirname (current directory)
+path.join(__dirname, 'uploads', 'file.txt');
+// Unix: '/home/user/project/uploads/file.txt'
+// Windows: 'C:\\Users\\user\\project\\uploads\\file.txt'
+
+// Handles extra slashes automatically
+path.join('uploads/', '/images', 'photo.jpg');
+// Result: 'uploads/images/photo.jpg' (normalized)
+
+// Handles relative paths
+path.join('..', 'parent', 'file.txt');
+// Goes up one directory, then into parent folder
+
+// Real-world example
+const uploadDir = path.join(__dirname, 'uploads', 'images');
+// Creates: project/uploads/images
+```
+
+**Key Features:**
+- ✅ Normalizes path separators automatically
+- ✅ Removes extra slashes
+- ✅ Handles relative paths (`..`, `.`)
+- ✅ Cross-platform compatible
+
+#### 2. `path.resolve(...paths)` - Resolve Absolute Path
+
+**Purpose:** Resolves an absolute path from relative paths
+
+**Syntax:**
+```javascript
+path.resolve([...paths])
+```
+
+**Examples:**
+```javascript
+const path = require('path');
+
+// Resolve relative path to absolute
+path.resolve('./uploads');
+// Unix: '/home/user/project/uploads'
+// Windows: 'C:\\Users\\user\\project\\uploads'
+
+// Multiple segments
+path.resolve('uploads', 'images', 'photo.jpg');
+// Resolves all segments to absolute path
+
+// With __dirname
+path.resolve(__dirname, 'uploads', 'file.txt');
+// Combines __dirname with additional segments
+
+// From current working directory
+path.resolve('config', 'database.json');
+// Resolves from process.cwd()
+
+// Real-world example
+const configPath = path.resolve(__dirname, 'config', 'app.json');
+// Always gets absolute path regardless of where script is run
+```
+
+**Difference: `join()` vs `resolve()`**
+```javascript
+// path.join() - Just joins segments
+path.join('uploads', 'file.txt');
+// Result: 'uploads/file.txt' (relative)
+
+// path.resolve() - Resolves to absolute path
+path.resolve('uploads', 'file.txt');
+// Result: '/full/absolute/path/uploads/file.txt' (absolute)
+```
+
+#### 3. `path.dirname(path)` - Get Directory Name
+
+**Purpose:** Returns the directory name of a path
+
+**Syntax:**
+```javascript
+path.dirname(path)
+```
+
+**Examples:**
+```javascript
+const path = require('path');
+
+// Get directory from file path
+path.dirname('/uploads/images/photo.jpg');
+// Result: '/uploads/images'
+
+path.dirname('./uploads/file.txt');
+// Result: './uploads'
+
+// With __dirname
+const filePath = path.join(__dirname, 'uploads', 'file.txt');
+const dir = path.dirname(filePath);
+// Result: '/path/to/project/uploads'
+
+// Real-world example
+const uploadedFile = '/uploads/user123/avatar.jpg';
+const uploadDir = path.dirname(uploadedFile);
+// Result: '/uploads/user123'
+```
+
+#### 4. `path.basename(path, [ext])` - Get Filename
+
+**Purpose:** Returns the last portion of a path (filename)
+
+**Syntax:**
+```javascript
+path.basename(path, [ext])
+```
+
+**Examples:**
+```javascript
+const path = require('path');
+
+// Get filename
+path.basename('/uploads/images/photo.jpg');
+// Result: 'photo.jpg'
+
+// Remove extension
+path.basename('/uploads/images/photo.jpg', '.jpg');
+// Result: 'photo'
+
+path.basename('/uploads/images/photo.jpg', path.extname('photo.jpg'));
+// Result: 'photo' (removes extension dynamically)
+
+// Real-world example
+const filePath = '/uploads/user123/avatar-1234567890.jpg';
+const filename = path.basename(filePath);
+// Result: 'avatar-1234567890.jpg'
+
+const nameWithoutExt = path.basename(filePath, path.extname(filePath));
+// Result: 'avatar-1234567890'
+```
+
+#### 5. `path.extname(path)` - Get File Extension
+
+**Purpose:** Returns the extension of a path
+
+**Syntax:**
+```javascript
+path.extname(path)
+```
+
+**Examples:**
+```javascript
+const path = require('path');
+
+// Get extension
+path.extname('photo.jpg');
+// Result: '.jpg'
+
+path.extname('/uploads/images/photo.jpg');
+// Result: '.jpg'
+
+path.extname('document.pdf');
+// Result: '.pdf'
+
+// No extension
+path.extname('file');
+// Result: ''
+
+// Multiple dots
+path.extname('file.min.js');
+// Result: '.js' (returns last extension)
+
+// Real-world example - File type validation
+const uploadedFile = req.file.originalname;
+const ext = path.extname(uploadedFile).toLowerCase();
+const allowedExts = ['.jpg', '.png', '.gif'];
+if (!allowedExts.includes(ext)) {
+  throw new Error('Invalid file type');
+}
+```
+
+#### 6. `path.parse(path)` - Parse Path into Object
+
+**Purpose:** Returns an object with all path components
+
+**Syntax:**
+```javascript
+path.parse(path)
+```
+
+**Examples:**
+```javascript
+const path = require('path');
+
+// Parse full path
+const parsed = path.parse('/uploads/images/photo.jpg');
+console.log(parsed);
+// {
+//   root: '/',
+//   dir: '/uploads/images',
+//   base: 'photo.jpg',
+//   ext: '.jpg',
+//   name: 'photo'
+// }
+
+// Real-world example
+const filePath = '/uploads/user123/avatar-1234567890.jpg';
+const parsed = path.parse(filePath);
+console.log(parsed.name);    // 'avatar-1234567890'
+console.log(parsed.ext);     // '.jpg'
+console.log(parsed.dir);     // '/uploads/user123'
+console.log(parsed.base);    // 'avatar-1234567890.jpg'
+```
+
+#### 7. `path.format(pathObject)` - Format Object into Path
+
+**Purpose:** Creates a path string from an object (opposite of `parse()`)
+
+**Syntax:**
+```javascript
+path.format(pathObject)
+```
+
+**Examples:**
+```javascript
+const path = require('path');
+
+// Format object to path
+const pathObj = {
+  root: '/',
+  dir: '/uploads/images',
+  base: 'photo.jpg',
+  ext: '.jpg',
+  name: 'photo'
+};
+path.format(pathObj);
+// Result: '/uploads/images/photo.jpg'
+
+// Real-world example - Modify filename
+const originalPath = '/uploads/old-name.jpg';
+const parsed = path.parse(originalPath);
+parsed.name = 'new-name';
+const newPath = path.format(parsed);
+// Result: '/uploads/new-name.jpg'
+```
+
+#### 8. `path.normalize(path)` - Normalize Path
+
+**Purpose:** Normalizes a path string (removes redundant separators, resolves `..` and `.`)
+
+**Syntax:**
+```javascript
+path.normalize(path)
+```
+
+**Examples:**
+```javascript
+const path = require('path');
+
+// Normalize redundant slashes
+path.normalize('/uploads//images///photo.jpg');
+// Result: '/uploads/images/photo.jpg'
+
+// Normalize relative paths
+path.normalize('uploads/../images/photo.jpg');
+// Result: 'images/photo.jpg'
+
+// Real-world example - Clean user input
+const userInput = 'uploads//images/../images/photo.jpg';
+const cleanPath = path.normalize(userInput);
+// Result: 'uploads/images/photo.jpg'
+```
+
+#### 9. `path.isAbsolute(path)` - Check if Path is Absolute
+
+**Purpose:** Determines if a path is an absolute path
+
+**Syntax:**
+```javascript
+path.isAbsolute(path)
+```
+
+**Examples:**
+```javascript
+const path = require('path');
+
+// Check if absolute
+path.isAbsolute('/uploads/file.txt');
+// Unix: true
+// Windows: true
+
+path.isAbsolute('./uploads/file.txt');
+// Result: false (relative)
+
+path.isAbsolute('uploads/file.txt');
+// Result: false (relative)
+
+// Real-world example
+const userPath = req.body.filePath;
+if (path.isAbsolute(userPath)) {
+  // Security check - reject absolute paths from user input
+  throw new Error('Absolute paths not allowed');
+}
+```
+
+#### 10. `path.relative(from, to)` - Get Relative Path
+
+**Purpose:** Returns the relative path from one path to another
+
+**Syntax:**
+```javascript
+path.relative(from, to)
+```
+
+**Examples:**
+```javascript
+const path = require('path');
+
+// Get relative path
+path.relative('/uploads/images', '/uploads/images/photo.jpg');
+// Result: 'photo.jpg'
+
+path.relative('/uploads', '/uploads/images/photo.jpg');
+// Result: 'images/photo.jpg'
+
+path.relative('/uploads/images', '/uploads/documents/file.pdf');
+// Result: '../documents/file.pdf'
+
+// Real-world example
+const baseDir = '/uploads';
+const filePath = '/uploads/user123/avatar.jpg';
+const relativePath = path.relative(baseDir, filePath);
+// Result: 'user123/avatar.jpg'
+```
+
+### Platform-Specific Methods
+
+#### Windows vs Unix Path Handling
+
+**Windows Path Methods:**
+```javascript
+const path = require('path');
+
+// Windows-specific separator
+path.win32.sep;  // '\\'
+
+// Windows path methods
+path.win32.join('uploads', 'file.txt');
+// Result: 'uploads\\file.txt'
+```
+
+**Unix Path Methods:**
+```javascript
+// Unix-specific separator
+path.posix.sep;  // '/'
+
+// Unix path methods
+path.posix.join('uploads', 'file.txt');
+// Result: 'uploads/file.txt'
+```
+
+**Default Behavior:**
+```javascript
+// Uses current platform's separator
+path.join('uploads', 'file.txt');
+// Windows: 'uploads\\file.txt'
+// Unix: 'uploads/file.txt'
+```
+
+### Real-World Examples
+
+#### Example 1: File Upload Path Construction
+
+```javascript
+const path = require('path');
+const multer = require('multer');
+
+// Create safe upload path
+const uploadDir = path.join(__dirname, 'uploads', 'images');
+
+// In multer configuration
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    const uniqueName = `${Date.now()}-${Math.random().toString(36).substring(7)}${ext}`;
+    cb(null, uniqueName);
+  }
+});
+```
+
+#### Example 2: Reading Configuration Files
+
+```javascript
+const path = require('path');
+const fs = require('fs');
+
+// Resolve config file path
+const configPath = path.resolve(__dirname, 'config', 'app.json');
+
+// Read config
+const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+```
+
+#### Example 3: Serving Static Files
+
+```javascript
+const path = require('path');
+const express = require('express');
+
+// Serve static files with absolute path
+const publicDir = path.join(__dirname, 'public');
+app.use(express.static(publicDir));
+
+// Serve uploads
+const uploadsDir = path.resolve(__dirname, 'uploads');
+app.use('/uploads', express.static(uploadsDir));
+```
+
+#### Example 4: File Extension Validation
+
+```javascript
+const path = require('path');
+
+function validateFileExtension(filename, allowedExts) {
+  const ext = path.extname(filename).toLowerCase();
+  return allowedExts.includes(ext);
+}
+
+// Usage
+const filename = 'photo.jpg';
+if (validateFileExtension(filename, ['.jpg', '.png', '.gif'])) {
+  console.log('Valid file type');
+}
+```
+
+#### Example 5: Path Sanitization
+
+```javascript
+const path = require('path');
+
+function sanitizePath(userInput) {
+  // Normalize path
+  let cleanPath = path.normalize(userInput);
+  
+  // Remove any path traversal attempts
+  if (cleanPath.includes('..')) {
+    throw new Error('Path traversal not allowed');
+  }
+  
+  // Resolve to ensure it's within allowed directory
+  const baseDir = path.resolve(__dirname, 'uploads');
+  const resolvedPath = path.resolve(baseDir, cleanPath);
+  
+  // Ensure resolved path is within base directory
+  if (!resolvedPath.startsWith(baseDir)) {
+    throw new Error('Path outside allowed directory');
+  }
+  
+  return resolvedPath;
+}
+```
+
+### Common Path Patterns
+
+#### Pattern 1: Working with __dirname
+
+```javascript
+const path = require('path');
+
+// Get file in same directory as script
+const configFile = path.join(__dirname, 'config.json');
+
+// Get file in parent directory
+const parentFile = path.join(__dirname, '..', 'config.json');
+
+// Get file in subdirectory
+const dataFile = path.join(__dirname, 'data', 'users.json');
+```
+
+#### Pattern 2: Cross-Platform Paths
+
+```javascript
+const path = require('path');
+
+// Always use path.join() instead of string concatenation
+// ❌ BAD
+const badPath = __dirname + '/uploads/file.txt';
+
+// ✅ GOOD
+const goodPath = path.join(__dirname, 'uploads', 'file.txt');
+```
+
+#### Pattern 3: Extracting File Information
+
+```javascript
+const path = require('path');
+
+const filePath = '/uploads/images/photo-123.jpg';
+
+// Get all components
+const dir = path.dirname(filePath);        // '/uploads/images'
+const filename = path.basename(filePath);  // 'photo-123.jpg'
+const name = path.basename(filePath, path.extname(filePath)); // 'photo-123'
+const ext = path.extname(filePath);        // '.jpg'
+
+// Or use parse()
+const parsed = path.parse(filePath);
+// { root: '/', dir: '/uploads/images', base: 'photo-123.jpg', ext: '.jpg', name: 'photo-123' }
+```
+
+### Quick Reference Table
+
+| Method | Purpose | Example |
+|--------|---------|---------|
+| `path.join()` | Join path segments | `path.join('a', 'b')` → `'a/b'` |
+| `path.resolve()` | Resolve absolute path | `path.resolve('./a')` → `'/full/path/a'` |
+| `path.dirname()` | Get directory | `path.dirname('/a/b.txt')` → `'/a'` |
+| `path.basename()` | Get filename | `path.basename('/a/b.txt')` → `'b.txt'` |
+| `path.extname()` | Get extension | `path.extname('file.jpg')` → `'.jpg'` |
+| `path.parse()` | Parse to object | Returns object with all components |
+| `path.format()` | Format from object | Creates path from object |
+| `path.normalize()` | Normalize path | Removes redundant separators |
+| `path.isAbsolute()` | Check if absolute | Returns true/false |
+| `path.relative()` | Get relative path | Returns relative path between two |
+
+### Important Notes
+
+- ✅ **Always use `path.join()`** instead of string concatenation for cross-platform compatibility
+- ✅ **Use `path.resolve()`** when you need absolute paths
+- ✅ **Use `__dirname`** to reference files relative to your script location
+- ✅ **Normalize user input** paths to prevent security issues
+- ✅ **Validate paths** before using them in file operations
+- ⚠️ **Path separators** are handled automatically - don't hardcode `/` or `\`
+- ⚠️ **Relative paths** can be tricky - prefer absolute paths when possible
 
 ### No Installation Required
 This is a built-in Node.js module, no installation needed.
@@ -3609,6 +4691,47 @@ This is a built-in Node.js module, no installation needed.
 
 ### Description
 The `fs` module provides an API for interacting with the file system. It allows you to read, write, create, delete files and directories. The module offers both **synchronous** (blocking) and **asynchronous** (non-blocking) versions of most methods.
+
+### Key Methods
+
+These are the **most commonly used methods** in day-to-day development:
+
+- **`fs.readFileSync()` / `fs.readFile()`** - Read file content (most used!)
+- **`fs.writeFileSync()` / `fs.writeFile()`** - Write/create file
+- **`fs.existsSync()`** - Check if file/directory exists
+- **`fs.mkdirSync()` / `fs.mkdir()`** - Create directory
+- **`fs.readdirSync()` / `fs.readdir()`** - Read directory contents
+- **`fs.unlinkSync()` / `fs.unlink()`** - Delete file
+- **`fs.statSync()` / `fs.stat()`** - Get file/directory stats
+
+**Quick Examples:**
+```javascript
+const fs = require('fs');
+
+// Most common: Read file
+const data = fs.readFileSync('./file.txt', 'utf8');
+
+// Write file
+fs.writeFileSync('./output.txt', 'Hello World', 'utf8');
+
+// Check if exists
+if (fs.existsSync('./uploads')) {
+  console.log('Directory exists');
+}
+
+// Create directory
+fs.mkdirSync('./uploads', { recursive: true });
+
+// Read directory
+const files = fs.readdirSync('./uploads');
+
+// Delete file
+fs.unlinkSync('./temp.txt');
+
+// Get file stats
+const stats = fs.statSync('./file.txt');
+console.log('Size:', stats.size);
+```
 
 ### Key Methods - CRUD Operations
 
@@ -3874,6 +4997,385 @@ if (fs.existsSync('./temp-folder')) {
 fs.rmSync('./temp-folder', { recursive: true, force: true });
 ```
 
+### 🔥 **Advanced Real-World Examples**
+
+#### Example 1: Recursive Directory Traversal
+
+```javascript
+const fs = require('fs');
+const path = require('path');
+
+// Recursively read all files in directory
+function getAllFiles(dirPath, arrayOfFiles = []) {
+  const files = fs.readdirSync(dirPath);
+  
+  files.forEach(file => {
+    const filePath = path.join(dirPath, file);
+    if (fs.statSync(filePath).isDirectory()) {
+      arrayOfFiles = getAllFiles(filePath, arrayOfFiles);
+    } else {
+      arrayOfFiles.push(filePath);
+    }
+  });
+  
+  return arrayOfFiles;
+}
+
+// Usage
+const allFiles = getAllFiles('./uploads');
+console.log(allFiles);
+// ['uploads/image1.jpg', 'uploads/subfolder/image2.jpg', ...]
+```
+
+#### Example 2: File Size Monitoring
+
+```javascript
+const fs = require('fs');
+const path = require('path');
+
+// Monitor directory size
+function getDirectorySize(dirPath) {
+  let totalSize = 0;
+  
+  function calculateSize(currentPath) {
+    const stats = fs.statSync(currentPath);
+    
+    if (stats.isFile()) {
+      totalSize += stats.size;
+    } else if (stats.isDirectory()) {
+      const files = fs.readdirSync(currentPath);
+      files.forEach(file => {
+        calculateSize(path.join(currentPath, file));
+      });
+    }
+  }
+  
+  calculateSize(dirPath);
+  return totalSize;
+}
+
+// Usage
+const uploadsSize = getDirectorySize('./uploads');
+console.log(`Uploads directory size: ${(uploadsSize / 1024 / 1024).toFixed(2)} MB`);
+```
+
+#### Example 3: Cleanup Old Files
+
+```javascript
+const fs = require('fs');
+const path = require('path');
+
+// Delete files older than specified days
+function cleanupOldFiles(dirPath, daysOld = 30) {
+  const files = fs.readdirSync(dirPath);
+  const now = Date.now();
+  const maxAge = daysOld * 24 * 60 * 60 * 1000; // Convert days to milliseconds
+  
+  files.forEach(file => {
+    const filePath = path.join(dirPath, file);
+    const stats = fs.statSync(filePath);
+    const fileAge = now - stats.mtime.getTime();
+    
+    if (fileAge > maxAge) {
+      fs.unlinkSync(filePath);
+      console.log(`Deleted old file: ${file}`);
+    }
+  });
+}
+
+// Usage - Delete files older than 30 days
+cleanupOldFiles('./uploads', 30);
+```
+
+#### Example 4: Safe File Writing with Backup
+
+```javascript
+const fs = require('fs');
+const path = require('path');
+
+// Write file with automatic backup
+function safeWriteFile(filePath, data, encoding = 'utf8') {
+  // Create backup if file exists
+  if (fs.existsSync(filePath)) {
+    const backupPath = filePath + '.backup';
+    fs.copyFileSync(filePath, backupPath);
+    console.log(`Backup created: ${backupPath}`);
+  }
+  
+  // Write new file
+  fs.writeFileSync(filePath, data, encoding);
+  console.log(`File written: ${filePath}`);
+}
+
+// Usage
+safeWriteFile('./config.json', JSON.stringify({ key: 'value' }, null, 2));
+```
+
+#### Example 5: Reading JSON Configuration Files
+
+```javascript
+const fs = require('fs');
+const path = require('path');
+
+// Read and parse JSON config file
+function loadConfig(configPath) {
+  try {
+    if (!fs.existsSync(configPath)) {
+      throw new Error(`Config file not found: ${configPath}`);
+    }
+    
+    const data = fs.readFileSync(configPath, 'utf8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.error('Error loading config:', error.message);
+    return null;
+  }
+}
+
+// Usage
+const config = loadConfig('./config.json');
+if (config) {
+  console.log('Config loaded:', config);
+}
+```
+
+#### Example 6: Logging to File
+
+```javascript
+const fs = require('fs');
+const path = require('path');
+
+// Simple file logger
+class FileLogger {
+  constructor(logPath) {
+    this.logPath = logPath;
+    this.ensureLogFile();
+  }
+  
+  ensureLogFile() {
+    if (!fs.existsSync(this.logPath)) {
+      fs.writeFileSync(this.logPath, '');
+    }
+  }
+  
+  log(level, message) {
+    const timestamp = new Date().toISOString();
+    const logEntry = `[${timestamp}] [${level}] ${message}\n`;
+    fs.appendFileSync(this.logPath, logEntry, 'utf8');
+  }
+  
+  info(message) { this.log('INFO', message); }
+  error(message) { this.log('ERROR', message); }
+  warn(message) { this.log('WARN', message); }
+}
+
+// Usage
+const logger = new FileLogger('./app.log');
+logger.info('Application started');
+logger.error('Something went wrong');
+```
+
+#### Example 7: File Watcher (Monitor File Changes)
+
+```javascript
+const fs = require('fs');
+
+// Watch file for changes
+function watchFile(filePath, callback) {
+  fs.watchFile(filePath, { interval: 1000 }, (curr, prev) => {
+    if (curr.mtime !== prev.mtime) {
+      console.log(`File ${filePath} was modified`);
+      callback(curr, prev);
+    }
+  });
+}
+
+// Usage
+watchFile('./config.json', (curr, prev) => {
+  console.log('Config file changed, reloading...');
+  const config = JSON.parse(fs.readFileSync('./config.json', 'utf8'));
+  // Reload configuration
+});
+
+// Stop watching
+// fs.unwatchFile('./config.json');
+```
+
+#### Example 8: Create Directory Structure
+
+```javascript
+const fs = require('fs');
+const path = require('path');
+
+// Create nested directory structure
+function createDirectoryStructure(basePath, structure) {
+  for (const [name, children] of Object.entries(structure)) {
+    const dirPath = path.join(basePath, name);
+    
+    if (!fs.existsSync(dirPath)) {
+      fs.mkdirSync(dirPath, { recursive: true });
+      console.log(`Created directory: ${dirPath}`);
+    }
+    
+    if (children && typeof children === 'object') {
+      createDirectoryStructure(dirPath, children);
+    }
+  }
+}
+
+// Usage - Create upload directory structure
+createDirectoryStructure('./', {
+  uploads: {
+    images: {},
+    documents: {},
+    videos: {}
+  },
+  logs: {},
+  temp: {}
+});
+```
+
+#### Example 9: File Type Detection and Organization
+
+```javascript
+const fs = require('fs');
+const path = require('path');
+
+// Organize files by type
+function organizeFilesByType(sourceDir, targetBaseDir) {
+  const files = fs.readdirSync(sourceDir);
+  
+  const fileTypes = {
+    images: ['.jpg', '.jpeg', '.png', '.gif', '.webp'],
+    documents: ['.pdf', '.doc', '.docx', '.txt'],
+    videos: ['.mp4', '.avi', '.mov', '.mkv']
+  };
+  
+  files.forEach(file => {
+    const filePath = path.join(sourceDir, file);
+    if (fs.statSync(filePath).isFile()) {
+      const ext = path.extname(file).toLowerCase();
+      
+      // Find category
+      let category = 'other';
+      for (const [type, extensions] of Object.entries(fileTypes)) {
+        if (extensions.includes(ext)) {
+          category = type;
+          break;
+        }
+      }
+      
+      // Create category directory if needed
+      const categoryDir = path.join(targetBaseDir, category);
+      if (!fs.existsSync(categoryDir)) {
+        fs.mkdirSync(categoryDir, { recursive: true });
+      }
+      
+      // Move file
+      const targetPath = path.join(categoryDir, file);
+      fs.renameSync(filePath, targetPath);
+      console.log(`Moved ${file} to ${category}/`);
+    }
+  });
+}
+
+// Usage
+organizeFilesByType('./downloads', './organized');
+```
+
+#### Example 10: Async/Await Pattern for File Operations
+
+```javascript
+const fs = require('fs').promises;
+const path = require('path');
+
+// Modern async/await file operations
+async function processFiles() {
+  try {
+    // Read directory
+    const files = await fs.readdir('./uploads');
+    
+    // Process each file
+    for (const file of files) {
+      const filePath = path.join('./uploads', file);
+      const stats = await fs.stat(filePath);
+      
+      if (stats.isFile()) {
+        const content = await fs.readFile(filePath, 'utf8');
+        console.log(`File: ${file}, Size: ${stats.size} bytes`);
+        // Process file content...
+      }
+    }
+  } catch (error) {
+    console.error('Error processing files:', error);
+  }
+}
+
+// Usage
+processFiles();
+```
+
+#### Example 11: Stream Large Files
+
+```javascript
+const fs = require('fs');
+
+// Read large file in chunks (streaming)
+function readLargeFile(filePath, chunkSize = 1024 * 1024) { // 1MB chunks
+  return new Promise((resolve, reject) => {
+    const stream = fs.createReadStream(filePath, { highWaterMark: chunkSize });
+    let data = '';
+    
+    stream.on('data', (chunk) => {
+      data += chunk.toString();
+      // Process chunk if needed
+      console.log(`Read ${chunk.length} bytes`);
+    });
+    
+    stream.on('end', () => {
+      resolve(data);
+    });
+    
+    stream.on('error', (error) => {
+      reject(error);
+    });
+  });
+}
+
+// Usage
+readLargeFile('./large-file.txt')
+  .then(data => console.log('File read complete'))
+  .catch(error => console.error('Error:', error));
+```
+
+#### Example 12: Check Disk Space (Unix/Linux)
+
+```javascript
+const fs = require('fs');
+
+// Get directory stats (Unix/Linux only)
+function getDirectoryStats(dirPath) {
+  try {
+    const stats = fs.statSync(dirPath);
+    return {
+      exists: true,
+      isDirectory: stats.isDirectory(),
+      isFile: stats.isFile(),
+      size: stats.size,
+      created: stats.birthtime,
+      modified: stats.mtime,
+      accessed: stats.atime
+    };
+  } catch (error) {
+    return { exists: false, error: error.message };
+  }
+}
+
+// Usage
+const stats = getDirectoryStats('./uploads');
+console.log('Directory stats:', stats);
+```
+
 ### ⚠️ **Important Notes**
 
 - **Synchronous methods block** the event loop - use carefully
@@ -3889,7 +5391,1452 @@ This is a built-in Node.js module, no installation needed.
 
 ---
 
-## 8. Express Rate Limit
+## 8. OS (Node.js Built-in)
+
+**Package:** `os`  
+**Type:** Node.js Built-in Module  
+**Purpose:** Operating system-related utility methods and properties
+
+### Description
+The `os` module provides operating system-related utility methods and properties. It allows you to interact with the underlying operating system, get system information, network interfaces, CPU details, memory information, and more. This is particularly useful for system monitoring, logging, and cross-platform compatibility.
+
+### Why OS Module is Important
+
+**Use Cases:**
+- ✅ **System Information:** Get OS type, platform, architecture
+- ✅ **Resource Monitoring:** Check CPU, memory usage
+- ✅ **Network Information:** Get network interfaces and IP addresses
+- ✅ **Path Utilities:** Get system-specific paths (home directory, temp directory)
+- ✅ **Performance Monitoring:** Monitor system resources
+- ✅ **Cross-Platform Compatibility:** Detect OS and adjust behavior accordingly
+
+### Key Methods
+
+These are the **most commonly used methods** in day-to-day development:
+
+- **`os.platform()`** - Get OS platform (win32, darwin, linux) (most used!)
+- **`os.homedir()`** - Get home directory path
+- **`os.tmpdir()`** - Get temporary directory path
+- **`os.totalmem()` / `os.freemem()`** - Get memory information
+- **`os.cpus()`** - Get CPU information
+- **`os.networkInterfaces()`** - Get network interfaces and IP addresses
+
+**Quick Examples:**
+```javascript
+const os = require('os');
+
+// Most common: Get platform
+const platform = os.platform(); // 'win32', 'darwin', 'linux'
+
+// Get paths
+const homeDir = os.homedir();   // '/home/user' or 'C:\\Users\\user'
+const tempDir = os.tmpdir();    // '/tmp' or 'C:\\Users\\user\\AppData\\Local\\Temp'
+
+// Get memory
+const totalMem = os.totalmem(); // Total memory in bytes
+const freeMem = os.freemem();   // Free memory in bytes
+
+// Get CPU info
+const cpus = os.cpus();
+console.log(`CPU cores: ${cpus.length}`);
+
+// Get network interfaces
+const interfaces = os.networkInterfaces();
+```
+
+### Key Methods and Properties - Detailed
+
+#### 1. `os.platform()` - Get Operating System Platform
+
+**Purpose:** Returns the operating system platform
+
+**Syntax:**
+```javascript
+os.platform()
+```
+
+**Examples:**
+```javascript
+const os = require('os');
+
+// Get platform
+const platform = os.platform();
+console.log(platform);
+// 'win32' - Windows
+// 'darwin' - macOS
+// 'linux' - Linux
+// 'freebsd' - FreeBSD
+// 'openbsd' - OpenBSD
+
+// Real-world example - Platform-specific code
+if (os.platform() === 'win32') {
+  console.log('Running on Windows');
+  // Windows-specific code
+} else if (os.platform() === 'darwin') {
+  console.log('Running on macOS');
+  // macOS-specific code
+} else {
+  console.log('Running on Unix/Linux');
+  // Unix/Linux-specific code
+}
+```
+
+#### 2. `os.type()` - Get Operating System Type
+
+**Purpose:** Returns the operating system type
+
+**Syntax:**
+```javascript
+os.type()
+```
+
+**Examples:**
+```javascript
+const os = require('os');
+
+// Get OS type
+const osType = os.type();
+console.log(osType);
+// 'Windows_NT' - Windows
+// 'Darwin' - macOS
+// 'Linux' - Linux
+// 'FreeBSD' - FreeBSD
+
+// Real-world example
+const osType = os.type();
+console.log(`Operating System: ${osType}`);
+```
+
+#### 3. `os.arch()` - Get CPU Architecture
+
+**Purpose:** Returns the CPU architecture
+
+**Syntax:**
+```javascript
+os.arch()
+```
+
+**Examples:**
+```javascript
+const os = require('os');
+
+// Get architecture
+const arch = os.arch();
+console.log(arch);
+// 'x64' - 64-bit
+// 'arm' - ARM
+// 'arm64' - ARM 64-bit
+// 'ia32' - 32-bit
+// 'mips' - MIPS
+
+// Real-world example
+const arch = os.arch();
+console.log(`CPU Architecture: ${arch}`);
+if (arch === 'x64') {
+  console.log('Running on 64-bit system');
+}
+```
+
+#### 4. `os.release()` - Get OS Release Version
+
+**Purpose:** Returns the operating system release version
+
+**Syntax:**
+```javascript
+os.release()
+```
+
+**Examples:**
+```javascript
+const os = require('os');
+
+// Get OS release
+const release = os.release();
+console.log(release);
+// Windows: '10.0.19042'
+// macOS: '20.6.0'
+// Linux: '5.4.0-74-generic'
+
+// Real-world example
+console.log(`OS Release: ${os.release()}`);
+```
+
+#### 5. `os.hostname()` - Get System Hostname
+
+**Purpose:** Returns the hostname of the operating system
+
+**Syntax:**
+```javascript
+os.hostname()
+```
+
+**Examples:**
+```javascript
+const os = require('os');
+
+// Get hostname
+const hostname = os.hostname();
+console.log(hostname);
+// 'DESKTOP-ABC123'
+// 'my-macbook.local'
+// 'server-01'
+
+// Real-world example - Server identification
+const serverInfo = {
+  hostname: os.hostname(),
+  platform: os.platform(),
+  arch: os.arch()
+};
+console.log('Server Info:', serverInfo);
+```
+
+#### 6. `os.homedir()` - Get Home Directory
+
+**Purpose:** Returns the home directory of the current user
+
+**Syntax:**
+```javascript
+os.homedir()
+```
+
+**Examples:**
+```javascript
+const os = require('os');
+const path = require('path');
+
+// Get home directory
+const homeDir = os.homedir();
+console.log(homeDir);
+// Windows: 'C:\\Users\\username'
+// Unix/Linux: '/home/username'
+// macOS: '/Users/username'
+
+// Real-world example - User config file
+const configPath = path.join(os.homedir(), '.myapp', 'config.json');
+console.log(`Config file: ${configPath}`);
+```
+
+#### 7. `os.tmpdir()` - Get Temporary Directory
+
+**Purpose:** Returns the operating system's default directory for temporary files
+
+**Syntax:**
+```javascript
+os.tmpdir()
+```
+
+**Examples:**
+```javascript
+const os = require('os');
+const path = require('path');
+const fs = require('fs');
+
+// Get temp directory
+const tempDir = os.tmpdir();
+console.log(tempDir);
+// Windows: 'C:\\Users\\username\\AppData\\Local\\Temp'
+// Unix/Linux: '/tmp'
+// macOS: '/var/folders/.../T'
+
+// Real-world example - Create temp file
+const tempFile = path.join(os.tmpdir(), `temp-${Date.now()}.txt`);
+fs.writeFileSync(tempFile, 'Temporary data');
+console.log(`Temp file created: ${tempFile}`);
+```
+
+#### 8. `os.cpus()` - Get CPU Information
+
+**Purpose:** Returns an array of objects containing information about each CPU/core
+
+**Syntax:**
+```javascript
+os.cpus()
+```
+
+**Examples:**
+```javascript
+const os = require('os');
+
+// Get CPU information
+const cpus = os.cpus();
+console.log(`Number of CPUs: ${cpus.length}`);
+
+cpus.forEach((cpu, index) => {
+  console.log(`CPU ${index}:`, {
+    model: cpu.model,
+    speed: `${cpu.speed} MHz`,
+    times: {
+      user: cpu.times.user,
+      nice: cpu.times.nice,
+      sys: cpu.times.sys,
+      idle: cpu.times.idle,
+      irq: cpu.times.irq
+    }
+  });
+});
+
+// Real-world example - CPU usage calculation
+function getCPUUsage() {
+  const cpus = os.cpus();
+  let totalIdle = 0;
+  let totalTick = 0;
+  
+  cpus.forEach(cpu => {
+    for (const type in cpu.times) {
+      totalTick += cpu.times[type];
+    }
+    totalIdle += cpu.times.idle;
+  });
+  
+  const idle = totalIdle / cpus.length;
+  const total = totalTick / cpus.length;
+  const usage = 100 - ~~(100 * idle / total);
+  
+  return usage;
+}
+
+console.log(`CPU Usage: ${getCPUUsage()}%`);
+```
+
+#### 9. `os.totalmem()` - Get Total System Memory
+
+**Purpose:** Returns the total amount of system memory in bytes
+
+**Syntax:**
+```javascript
+os.totalmem()
+```
+
+**Examples:**
+```javascript
+const os = require('os');
+
+// Get total memory
+const totalMem = os.totalmem();
+console.log(`Total Memory: ${(totalMem / 1024 / 1024 / 1024).toFixed(2)} GB`);
+
+// Real-world example - Memory information
+function getMemoryInfo() {
+  const totalMem = os.totalmem();
+  const freeMem = os.freemem();
+  const usedMem = totalMem - freeMem;
+  
+  return {
+    total: `${(totalMem / 1024 / 1024 / 1024).toFixed(2)} GB`,
+    free: `${(freeMem / 1024 / 1024 / 1024).toFixed(2)} GB`,
+    used: `${(usedMem / 1024 / 1024 / 1024).toFixed(2)} GB`,
+    usagePercent: ((usedMem / totalMem) * 100).toFixed(2) + '%'
+  };
+}
+
+console.log('Memory Info:', getMemoryInfo());
+```
+
+#### 10. `os.freemem()` - Get Free System Memory
+
+**Purpose:** Returns the amount of free system memory in bytes
+
+**Syntax:**
+```javascript
+os.freemem()
+```
+
+**Examples:**
+```javascript
+const os = require('os');
+
+// Get free memory
+const freeMem = os.freemem();
+console.log(`Free Memory: ${(freeMem / 1024 / 1024 / 1024).toFixed(2)} GB`);
+
+// Real-world example - Memory monitoring
+function checkMemory() {
+  const totalMem = os.totalmem();
+  const freeMem = os.freemem();
+  const usedMem = totalMem - freeMem;
+  const usagePercent = (usedMem / totalMem) * 100;
+  
+  if (usagePercent > 90) {
+    console.warn('⚠️ High memory usage:', usagePercent.toFixed(2) + '%');
+  } else {
+    console.log('✓ Memory usage:', usagePercent.toFixed(2) + '%');
+  }
+}
+
+checkMemory();
+```
+
+#### 11. `os.uptime()` - Get System Uptime
+
+**Purpose:** Returns the system uptime in seconds
+
+**Syntax:**
+```javascript
+os.uptime()
+```
+
+**Examples:**
+```javascript
+const os = require('os');
+
+// Get system uptime
+const uptime = os.uptime();
+console.log(`System Uptime: ${uptime} seconds`);
+
+// Format uptime
+function formatUptime(seconds) {
+  const days = Math.floor(seconds / 86400);
+  const hours = Math.floor((seconds % 86400) / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+  
+  return `${days}d ${hours}h ${minutes}m ${secs}s`;
+}
+
+console.log(`System Uptime: ${formatUptime(os.uptime())}`);
+```
+
+#### 12. `os.networkInterfaces()` - Get Network Interfaces
+
+**Purpose:** Returns an object containing network interfaces that have been assigned a network address
+
+**Syntax:**
+```javascript
+os.networkInterfaces()
+```
+
+**Examples:**
+```javascript
+const os = require('os');
+
+// Get network interfaces
+const interfaces = os.networkInterfaces();
+console.log('Network Interfaces:', interfaces);
+
+// Real-world example - Get local IP address
+function getLocalIP() {
+  const interfaces = os.networkInterfaces();
+  
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name]) {
+      // Skip internal (loopback) addresses
+      if (iface.family === 'IPv4' && !iface.internal) {
+        return iface.address;
+      }
+    }
+  }
+  
+  return '127.0.0.1'; // Fallback to localhost
+}
+
+const localIP = getLocalIP();
+console.log(`Local IP Address: ${localIP}`);
+
+// Get all IP addresses
+function getAllIPs() {
+  const interfaces = os.networkInterfaces();
+  const ips = [];
+  
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name]) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        ips.push({
+          interface: name,
+          address: iface.address,
+          netmask: iface.netmask,
+          mac: iface.mac
+        });
+      }
+    }
+  }
+  
+  return ips;
+}
+
+console.log('All IP Addresses:', getAllIPs());
+```
+
+#### 13. `os.endianness()` - Get CPU Endianness
+
+**Purpose:** Returns the endianness of the CPU
+
+**Syntax:**
+```javascript
+os.endianness()
+```
+
+**Examples:**
+```javascript
+const os = require('os');
+
+// Get endianness
+const endianness = os.endianness();
+console.log(endianness);
+// 'BE' - Big Endian
+// 'LE' - Little Endian (most common)
+
+// Real-world example
+if (os.endianness() === 'LE') {
+  console.log('Little Endian system');
+} else {
+  console.log('Big Endian system');
+}
+```
+
+#### 14. `os.loadavg()` - Get System Load Average (Unix/Linux only)
+
+**Purpose:** Returns an array containing the 1, 5, and 15 minute load averages (Unix/Linux only)
+
+**Syntax:**
+```javascript
+os.loadavg()
+```
+
+**Examples:**
+```javascript
+const os = require('os');
+
+// Get load average (Unix/Linux only)
+if (os.platform() !== 'win32') {
+  const loadAvg = os.loadavg();
+  console.log('Load Average:', {
+    '1 minute': loadAvg[0].toFixed(2),
+    '5 minutes': loadAvg[1].toFixed(2),
+    '15 minutes': loadAvg[2].toFixed(2)
+  });
+} else {
+  console.log('Load average not available on Windows');
+}
+```
+
+#### 15. `os.userInfo([options])` - Get User Information
+
+**Purpose:** Returns information about the current user
+
+**Syntax:**
+```javascript
+os.userInfo([options])
+```
+
+**Examples:**
+```javascript
+const os = require('os');
+
+// Get user info
+const userInfo = os.userInfo();
+console.log(userInfo);
+// {
+//   username: 'username',
+//   uid: 1000,        // Unix/Linux only
+//   gid: 1000,        // Unix/Linux only
+//   homedir: '/home/username',
+//   shell: '/bin/bash'  // Unix/Linux only
+// }
+
+// With encoding option
+const userInfoEncoded = os.userInfo({ encoding: 'buffer' });
+console.log(userInfoEncoded);
+
+// Real-world example
+console.log(`Current User: ${userInfo.username}`);
+console.log(`Home Directory: ${userInfo.homedir}`);
+```
+
+### Real-World Examples
+
+#### Example 1: System Information Dashboard
+
+```javascript
+const os = require('os');
+
+function getSystemInfo() {
+  return {
+    platform: os.platform(),
+    type: os.type(),
+    release: os.release(),
+    architecture: os.arch(),
+    hostname: os.hostname(),
+    cpus: {
+      count: os.cpus().length,
+      model: os.cpus()[0].model
+    },
+    memory: {
+      total: `${(os.totalmem() / 1024 / 1024 / 1024).toFixed(2)} GB`,
+      free: `${(os.freemem() / 1024 / 1024 / 1024).toFixed(2)} GB`,
+      used: `${((os.totalmem() - os.freemem()) / 1024 / 1024 / 1024).toFixed(2)} GB`
+    },
+    uptime: `${Math.floor(os.uptime() / 3600)} hours`,
+    homeDir: os.homedir(),
+    tempDir: os.tmpdir()
+  };
+}
+
+console.log('System Information:', JSON.stringify(getSystemInfo(), null, 2));
+```
+
+#### Example 2: Server Health Check
+
+```javascript
+const os = require('os');
+
+function checkServerHealth() {
+  const health = {
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    issues: []
+  };
+  
+  // Check memory usage
+  const memUsage = ((os.totalmem() - os.freemem()) / os.totalmem()) * 100;
+  if (memUsage > 90) {
+    health.status = 'warning';
+    health.issues.push(`High memory usage: ${memUsage.toFixed(2)}%`);
+  }
+  
+  // Check disk space (would need additional module)
+  // Check CPU load (Unix/Linux)
+  if (os.platform() !== 'win32') {
+    const loadAvg = os.loadavg()[0];
+    const cpuCount = os.cpus().length;
+    if (loadAvg > cpuCount * 2) {
+      health.status = 'warning';
+      health.issues.push(`High CPU load: ${loadAvg.toFixed(2)}`);
+    }
+  }
+  
+  return health;
+}
+
+console.log('Server Health:', checkServerHealth());
+```
+
+#### Example 3: Cross-Platform Path Handling
+
+```javascript
+const os = require('os');
+const path = require('path');
+
+// Get platform-specific paths
+function getPlatformPaths() {
+  const platform = os.platform();
+  
+  if (platform === 'win32') {
+    return {
+      config: path.join(os.homedir(), 'AppData', 'Roaming', 'myapp'),
+      logs: path.join(os.homedir(), 'AppData', 'Local', 'myapp', 'logs'),
+      temp: os.tmpdir()
+    };
+  } else {
+    return {
+      config: path.join(os.homedir(), '.config', 'myapp'),
+      logs: path.join(os.homedir(), '.local', 'share', 'myapp', 'logs'),
+      temp: os.tmpdir()
+    };
+  }
+}
+
+const paths = getPlatformPaths();
+console.log('Platform Paths:', paths);
+```
+
+#### Example 4: Resource Monitoring
+
+```javascript
+const os = require('os');
+
+// Monitor system resources
+class SystemMonitor {
+  constructor() {
+    this.interval = null;
+  }
+  
+  start(intervalMs = 5000) {
+    this.interval = setInterval(() => {
+      this.logResources();
+    }, intervalMs);
+  }
+  
+  stop() {
+    if (this.interval) {
+      clearInterval(this.interval);
+      this.interval = null;
+    }
+  }
+  
+  logResources() {
+    const memUsage = ((os.totalmem() - os.freemem()) / os.totalmem()) * 100;
+    const uptime = Math.floor(os.uptime() / 3600);
+    
+    console.log(`[${new Date().toISOString()}]`, {
+      memory: `${memUsage.toFixed(2)}%`,
+      uptime: `${uptime}h`,
+      cpus: os.cpus().length
+    });
+  }
+}
+
+// Usage
+const monitor = new SystemMonitor();
+monitor.start(5000); // Log every 5 seconds
+
+// Stop after 30 seconds
+setTimeout(() => monitor.stop(), 30000);
+```
+
+#### Example 5: Network Interface Detection
+
+```javascript
+const os = require('os');
+
+// Get primary network interface
+function getPrimaryInterface() {
+  const interfaces = os.networkInterfaces();
+  
+  // Priority order: Ethernet > WiFi > Other
+  const priorities = ['eth0', 'en0', 'Ethernet', 'Wi-Fi', 'WiFi'];
+  
+  for (const priority of priorities) {
+    if (interfaces[priority]) {
+      for (const iface of interfaces[priority]) {
+        if (iface.family === 'IPv4' && !iface.internal) {
+          return {
+            name: priority,
+            address: iface.address,
+            netmask: iface.netmask
+          };
+        }
+      }
+    }
+  }
+  
+  // Fallback: get first non-internal IPv4
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name]) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        return {
+          name: name,
+          address: iface.address,
+          netmask: iface.netmask
+        };
+      }
+    }
+  }
+  
+  return null;
+}
+
+const primaryInterface = getPrimaryInterface();
+console.log('Primary Network Interface:', primaryInterface);
+```
+
+#### Example 6: CPU Usage Calculation
+
+```javascript
+const os = require('os');
+
+// Calculate CPU usage over time
+function calculateCPUUsage(intervalMs = 1000) {
+  return new Promise((resolve) => {
+    const cpus1 = os.cpus();
+    const startIdle = cpus1.reduce((acc, cpu) => acc + cpu.times.idle, 0);
+    const startTotal = cpus1.reduce((acc, cpu) => {
+      return acc + Object.values(cpu.times).reduce((sum, time) => sum + time, 0);
+    }, 0);
+    
+    setTimeout(() => {
+      const cpus2 = os.cpus();
+      const endIdle = cpus2.reduce((acc, cpu) => acc + cpu.times.idle, 0);
+      const endTotal = cpus2.reduce((acc, cpu) => {
+        return acc + Object.values(cpu.times).reduce((sum, time) => sum + time, 0);
+      }, 0);
+      
+      const idle = endIdle - startIdle;
+      const total = endTotal - startTotal;
+      const usage = 100 - (100 * idle / total);
+      
+      resolve(usage.toFixed(2));
+    }, intervalMs);
+  });
+}
+
+// Usage
+calculateCPUUsage(1000).then(usage => {
+  console.log(`CPU Usage: ${usage}%`);
+});
+```
+
+### Quick Reference Table
+
+| Method/Property | Purpose | Returns |
+|----------------|---------|---------|
+| `os.platform()` | Get OS platform | 'win32', 'darwin', 'linux', etc. |
+| `os.type()` | Get OS type | 'Windows_NT', 'Darwin', 'Linux', etc. |
+| `os.arch()` | Get CPU architecture | 'x64', 'arm', 'arm64', etc. |
+| `os.release()` | Get OS release version | Version string |
+| `os.hostname()` | Get system hostname | Hostname string |
+| `os.homedir()` | Get home directory | Path string |
+| `os.tmpdir()` | Get temp directory | Path string |
+| `os.cpus()` | Get CPU information | Array of CPU objects |
+| `os.totalmem()` | Get total memory | Bytes (number) |
+| `os.freemem()` | Get free memory | Bytes (number) |
+| `os.uptime()` | Get system uptime | Seconds (number) |
+| `os.networkInterfaces()` | Get network interfaces | Object with interfaces |
+| `os.endianness()` | Get CPU endianness | 'BE' or 'LE' |
+| `os.loadavg()` | Get load average | Array [1min, 5min, 15min] |
+| `os.userInfo()` | Get user information | User info object |
+
+### Important Notes
+
+- ✅ **Cross-platform:** Most methods work on all platforms, but some (like `loadavg()`) are Unix/Linux only
+- ✅ **Memory values:** Always in bytes - convert to KB/MB/GB as needed
+- ✅ **Uptime:** Returns seconds - format for display (days, hours, minutes)
+- ✅ **Network interfaces:** Returns object with interface names as keys
+- ✅ **CPU information:** Array contains one object per CPU core
+- ⚠️ **Windows limitations:** Some methods (like `loadavg()`) don't work on Windows
+- ⚠️ **Performance:** Some methods (like `cpus()`) can be expensive - cache results if needed
+
+### No Installation Required
+This is a built-in Node.js module, no installation needed.
+
+---
+
+## 9. HTTP (Node.js Built-in)
+
+**Package:** `http`  
+**Type:** Node.js Built-in Module  
+**Purpose:** Create HTTP servers and make HTTP requests
+
+### Description
+The `http` module provides functionality to create HTTP servers and make HTTP client requests. While Express.js is built on top of the `http` module and is more commonly used, understanding the `http` module is important for low-level HTTP operations, creating custom servers, or making HTTP requests without external dependencies.
+
+### Why HTTP Module is Important
+
+**Use Cases:**
+- ✅ **Creating HTTP Servers:** Build custom HTTP servers without Express
+- ✅ **Making HTTP Requests:** Send GET, POST, PUT, DELETE requests
+- ✅ **Understanding Express:** Express is built on top of `http` module
+- ✅ **Low-level Control:** Fine-grained control over HTTP requests/responses
+- ✅ **No Dependencies:** Built-in module, no need to install packages
+- ✅ **Learning:** Understanding how HTTP works at a low level
+
+### Key Methods
+
+These are the **most commonly used methods** in day-to-day development:
+
+- **`http.createServer()`** - Create HTTP server (most used!)
+- **`http.request()`** - Make HTTP client request
+- **`http.get()`** - Make HTTP GET request (simpler than request)
+- **`server.listen()`** - Start server listening on port
+- **`req.on('data')`** - Handle incoming request data
+- **`res.write()` / `res.end()`** - Send response data
+
+**Quick Examples:**
+```javascript
+const http = require('http');
+
+// Most common: Create HTTP server
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Hello World');
+});
+
+// Start server
+server.listen(3000, () => {
+  console.log('Server running on port 3000');
+});
+
+// Make HTTP GET request
+http.get('http://api.example.com/data', (res) => {
+  let data = '';
+  res.on('data', chunk => data += chunk);
+  res.on('end', () => console.log(data));
+});
+```
+
+### Key Methods - Detailed
+
+#### 1. `http.createServer([options][, requestListener])` - Create HTTP Server
+
+**Purpose:** Creates an HTTP server instance
+
+**Syntax:**
+```javascript
+http.createServer([options][, requestListener])
+```
+
+**Examples:**
+```javascript
+const http = require('http');
+
+// Basic server
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Hello World');
+});
+
+// Server with options
+const server2 = http.createServer({
+  keepAlive: true,
+  keepAliveInitialDelay: 1000
+}, (req, res) => {
+  res.end('Response');
+});
+
+// Real-world example - Simple API server
+const apiServer = http.createServer((req, res) => {
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Content-Type', 'application/json');
+  
+  if (req.method === 'GET' && req.url === '/api/users') {
+    res.writeHead(200);
+    res.end(JSON.stringify({ users: ['John', 'Jane'] }));
+  } else {
+    res.writeHead(404);
+    res.end(JSON.stringify({ error: 'Not Found' }));
+  }
+});
+
+apiServer.listen(3000, () => {
+  console.log('API Server running on http://localhost:3000');
+});
+```
+
+#### 2. `server.listen([port][, host][, backlog][, callback])` - Start Server
+
+**Purpose:** Starts the HTTP server listening for connections
+
+**Syntax:**
+```javascript
+server.listen([port][, host][, backlog][, callback])
+```
+
+**Examples:**
+```javascript
+const http = require('http');
+
+const server = http.createServer((req, res) => {
+  res.end('Hello');
+});
+
+// Listen on port 3000
+server.listen(3000);
+
+// Listen on port with callback
+server.listen(3000, () => {
+  console.log('Server started on port 3000');
+});
+
+// Listen on specific host and port
+server.listen(3000, 'localhost', () => {
+  console.log('Server running on http://localhost:3000');
+});
+
+// Listen on all interfaces (0.0.0.0)
+server.listen(3000, '0.0.0.0', () => {
+  console.log('Server accessible from all network interfaces');
+});
+
+// Real-world example
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+```
+
+#### 3. `http.request(options[, callback])` - Make HTTP Request
+
+**Purpose:** Makes an HTTP request to a server
+
+**Syntax:**
+```javascript
+http.request(options[, callback])
+```
+
+**Examples:**
+```javascript
+const http = require('http');
+
+// Basic POST request
+const options = {
+  hostname: 'api.example.com',
+  port: 80,
+  path: '/users',
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Content-Length': Buffer.byteLength(JSON.stringify({ name: 'John' }))
+  }
+};
+
+const req = http.request(options, (res) => {
+  let data = '';
+  
+  res.on('data', (chunk) => {
+    data += chunk;
+  });
+  
+  res.on('end', () => {
+    console.log('Response:', JSON.parse(data));
+  });
+});
+
+req.on('error', (error) => {
+  console.error('Request error:', error);
+});
+
+// Send request body
+req.write(JSON.stringify({ name: 'John' }));
+req.end();
+
+// Real-world example - API request function
+function makeAPIRequest(method, path, data) {
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname: 'api.example.com',
+      port: 443,
+      path: path,
+      method: method,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    
+    const req = http.request(options, (res) => {
+      let responseData = '';
+      
+      res.on('data', chunk => responseData += chunk);
+      res.on('end', () => {
+        if (res.statusCode === 200) {
+          resolve(JSON.parse(responseData));
+        } else {
+          reject(new Error(`HTTP ${res.statusCode}: ${responseData}`));
+        }
+      });
+    });
+    
+    req.on('error', reject);
+    
+    if (data) {
+      req.write(JSON.stringify(data));
+    }
+    
+    req.end();
+  });
+}
+
+// Usage
+makeAPIRequest('GET', '/users')
+  .then(users => console.log(users))
+  .catch(error => console.error(error));
+```
+
+#### 4. `http.get(options[, callback])` - Make HTTP GET Request
+
+**Purpose:** Simplified method for making GET requests (automatically calls `req.end()`)
+
+**Syntax:**
+```javascript
+http.get(options[, callback])
+```
+
+**Examples:**
+```javascript
+const http = require('http');
+
+// Simple GET request
+http.get('http://api.example.com/users', (res) => {
+  let data = '';
+  
+  res.on('data', (chunk) => {
+    data += chunk;
+  });
+  
+  res.on('end', () => {
+    console.log('Response:', JSON.parse(data));
+  });
+}).on('error', (error) => {
+  console.error('Error:', error);
+});
+
+// With options object
+http.get({
+  hostname: 'api.example.com',
+  path: '/users',
+  headers: {
+    'User-Agent': 'MyApp/1.0'
+  }
+}, (res) => {
+  // Handle response
+}).on('error', (error) => {
+  console.error('Error:', error);
+});
+
+// Real-world example - Fetch JSON data
+function fetchJSON(url) {
+  return new Promise((resolve, reject) => {
+    http.get(url, (res) => {
+      const { statusCode } = res;
+      
+      if (statusCode !== 200) {
+        reject(new Error(`Request failed. Status: ${statusCode}`));
+        return;
+      }
+      
+      res.setEncoding('utf8');
+      let rawData = '';
+      
+      res.on('data', chunk => rawData += chunk);
+      res.on('end', () => {
+        try {
+          resolve(JSON.parse(rawData));
+        } catch (error) {
+          reject(error);
+        }
+      });
+    }).on('error', reject);
+  });
+}
+
+// Usage
+fetchJSON('http://api.example.com/data')
+  .then(data => console.log(data))
+  .catch(error => console.error(error));
+```
+
+#### 5. Request Object (`req`) - Incoming HTTP Request
+
+**Purpose:** Represents the incoming HTTP request
+
+**Key Properties and Methods:**
+```javascript
+const server = http.createServer((req, res) => {
+  // Request properties
+  console.log(req.method);        // 'GET', 'POST', 'PUT', 'DELETE'
+  console.log(req.url);           // '/api/users?id=123'
+  console.log(req.headers);        // Object with all headers
+  console.log(req.headers['content-type']); // Specific header
+  
+  // Request events
+  req.on('data', (chunk) => {
+    // Handle request body data
+    console.log('Received chunk:', chunk);
+  });
+  
+  req.on('end', () => {
+    // Request body finished
+    console.log('Request complete');
+  });
+  
+  req.on('error', (error) => {
+    // Handle request errors
+    console.error('Request error:', error);
+  });
+});
+```
+
+**Real-world example - Parse request body:**
+```javascript
+const http = require('http');
+
+const server = http.createServer((req, res) => {
+  let body = '';
+  
+  // Collect request body
+  req.on('data', chunk => {
+    body += chunk.toString();
+  });
+  
+  req.on('end', () => {
+    try {
+      const data = JSON.parse(body);
+      console.log('Received data:', data);
+      
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, received: data }));
+    } catch (error) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Invalid JSON' }));
+    }
+  });
+});
+```
+
+#### 6. Response Object (`res`) - Outgoing HTTP Response
+
+**Purpose:** Represents the outgoing HTTP response
+
+**Key Methods:**
+```javascript
+const server = http.createServer((req, res) => {
+  // Set status code and headers
+  res.writeHead(200, {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*'
+  });
+  
+  // Write response data
+  res.write('Hello ');
+  res.write('World');
+  
+  // End response (sends it)
+  res.end();
+  
+  // Or write and end in one call
+  res.end('Hello World');
+});
+```
+
+**Real-world example - Send JSON response:**
+```javascript
+const server = http.createServer((req, res) => {
+  const data = { message: 'Hello', users: ['John', 'Jane'] };
+  
+  res.writeHead(200, {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*'
+  });
+  
+  res.end(JSON.stringify(data));
+});
+```
+
+### Real-World Examples
+
+#### Example 1: Simple HTTP Server
+
+```javascript
+const http = require('http');
+
+const server = http.createServer((req, res) => {
+  // Set response headers
+  res.writeHead(200, { 'Content-Type': 'text/html' });
+  
+  // Send response
+  res.end(`
+    <html>
+      <body>
+        <h1>Hello from Node.js HTTP Server!</h1>
+        <p>Method: ${req.method}</p>
+        <p>URL: ${req.url}</p>
+      </body>
+    </html>
+  `);
+});
+
+server.listen(3000, () => {
+  console.log('Server running at http://localhost:3000');
+});
+```
+
+#### Example 2: REST API Server
+
+```javascript
+const http = require('http');
+const url = require('url');
+
+let users = [
+  { id: 1, name: 'John' },
+  { id: 2, name: 'Jane' }
+];
+
+const server = http.createServer((req, res) => {
+  const parsedUrl = url.parse(req.url, true);
+  const path = parsedUrl.pathname;
+  const method = req.method;
+  
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Content-Type', 'application/json');
+  
+  // GET /users
+  if (method === 'GET' && path === '/users') {
+    res.writeHead(200);
+    res.end(JSON.stringify(users));
+  }
+  // GET /users/:id
+  else if (method === 'GET' && path.startsWith('/users/')) {
+    const id = parseInt(path.split('/')[2]);
+    const user = users.find(u => u.id === id);
+    
+    if (user) {
+      res.writeHead(200);
+      res.end(JSON.stringify(user));
+    } else {
+      res.writeHead(404);
+      res.end(JSON.stringify({ error: 'User not found' }));
+    }
+  }
+  // POST /users
+  else if (method === 'POST' && path === '/users') {
+    let body = '';
+    
+    req.on('data', chunk => body += chunk);
+    req.on('end', () => {
+      const newUser = JSON.parse(body);
+      newUser.id = users.length + 1;
+      users.push(newUser);
+      
+      res.writeHead(201);
+      res.end(JSON.stringify(newUser));
+    });
+  }
+  else {
+    res.writeHead(404);
+    res.end(JSON.stringify({ error: 'Not Found' }));
+  }
+});
+
+server.listen(3000, () => {
+  console.log('REST API Server running on http://localhost:3000');
+});
+```
+
+#### Example 3: HTTP Client - Fetch Data
+
+```javascript
+const http = require('http');
+
+function fetchData(url) {
+  return new Promise((resolve, reject) => {
+    http.get(url, (res) => {
+      const { statusCode } = res;
+      
+      if (statusCode !== 200) {
+        reject(new Error(`Request failed. Status: ${statusCode}`));
+        res.resume(); // Consume response data to free up memory
+        return;
+      }
+      
+      res.setEncoding('utf8');
+      let rawData = '';
+      
+      res.on('data', chunk => rawData += chunk);
+      res.on('end', () => {
+        try {
+          resolve(JSON.parse(rawData));
+        } catch (error) {
+          reject(error);
+        }
+      });
+    }).on('error', reject);
+  });
+}
+
+// Usage
+fetchData('http://jsonplaceholder.typicode.com/users')
+  .then(users => {
+    console.log('Users:', users);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+```
+
+#### Example 4: File Server
+
+```javascript
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
+
+const server = http.createServer((req, res) => {
+  // Remove query string
+  const filePath = req.url.split('?')[0];
+  
+  // Security: prevent path traversal
+  if (filePath.includes('..')) {
+    res.writeHead(403);
+    res.end('Forbidden');
+    return;
+  }
+  
+  // Serve from public directory
+  const fullPath = path.join(__dirname, 'public', filePath || 'index.html');
+  
+  fs.readFile(fullPath, (err, data) => {
+    if (err) {
+      res.writeHead(404);
+      res.end('File not found');
+      return;
+    }
+    
+    // Determine content type
+    const ext = path.extname(fullPath);
+    const contentTypes = {
+      '.html': 'text/html',
+      '.css': 'text/css',
+      '.js': 'application/javascript',
+      '.json': 'application/json',
+      '.png': 'image/png',
+      '.jpg': 'image/jpeg'
+    };
+    
+    res.writeHead(200, {
+      'Content-Type': contentTypes[ext] || 'text/plain'
+    });
+    res.end(data);
+  });
+});
+
+server.listen(3000, () => {
+  console.log('File server running on http://localhost:3000');
+});
+```
+
+### Quick Reference Table
+
+| Method | Purpose | Example |
+|--------|---------|---------|
+| `http.createServer()` | Create HTTP server | `http.createServer((req, res) => {...})` |
+| `server.listen()` | Start server | `server.listen(3000)` |
+| `http.request()` | Make HTTP request | `http.request(options, callback)` |
+| `http.get()` | Make GET request | `http.get(url, callback)` |
+| `req.method` | Request method | `'GET'`, `'POST'`, etc. |
+| `req.url` | Request URL | `'/api/users?id=123'` |
+| `req.headers` | Request headers | Object with headers |
+| `res.writeHead()` | Set status & headers | `res.writeHead(200, {...})` |
+| `res.write()` | Write response data | `res.write('data')` |
+| `res.end()` | End response | `res.end('final data')` |
+
+### Important Notes
+
+- ✅ **Express is built on `http`:** Understanding `http` helps understand Express
+- ✅ **Low-level control:** More control but more code than Express
+- ✅ **No routing:** Must manually handle routes (Express does this automatically)
+- ✅ **Request body:** Must manually parse request body (Express does this automatically)
+- ✅ **HTTPS:** Use `https` module for HTTPS (similar API)
+- ⚠️ **Error handling:** Always handle errors in request/response events
+- ⚠️ **Memory:** Large request bodies can consume memory - use streams for large data
+- ⚠️ **Security:** Always validate and sanitize user input
+
+### HTTPS Module
+
+For HTTPS servers and requests, use the `https` module (similar API):
+
+```javascript
+const https = require('https');
+
+// HTTPS server (requires certificates)
+const server = https.createServer({
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem')
+}, (req, res) => {
+  res.end('Hello HTTPS');
+});
+
+// HTTPS request
+https.get('https://api.example.com/data', (res) => {
+  // Handle response
+});
+```
+
+### No Installation Required
+This is a built-in Node.js module, no installation needed.
+
+---
+
+## 10. Express Rate Limit
 
 **Package:** `express-rate-limit`  
 **Type:** External NPM Package  
@@ -4132,7 +7079,7 @@ npm install express-rate-limit
 
 ---
 
-## 9. Express.json() and Body Parser Relationship
+## 11. Express.json() and Body Parser Relationship
 
 ### What is `express.json()`?
 
@@ -4225,7 +7172,7 @@ app.use(express.json({
 
 ---
 
-## 10. Express.urlencoded() - Understanding URL-Encoded Form Data
+## 12. Express.urlencoded() - Understanding URL-Encoded Form Data
 
 ### What is `express.urlencoded()`?
 
@@ -4528,7 +7475,7 @@ app.post('/contact', (req, res) => {
 
 ---
 
-## 11. Express.static() - Serving Static Files
+## 13. Express.static() - Serving Static Files
 
 ### What is `express.static()`?
 
@@ -4891,7 +7838,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Best pr
 
 ---
 
-## 12. Body Parser (Deprecated)
+## 14. Body Parser (Deprecated)
 
 **Package:** `body-parser`  
 **Type:** External NPM Package (Deprecated)  
@@ -4935,6 +7882,8 @@ npm install body-parser  # Only if using Express < 4.16.0
 | multer | External | File uploads | `npm install multer` |
 | path | Built-in | Path utilities | No installation needed |
 | fs | Built-in | File system | No installation needed |
+| os | Built-in | Operating system utilities | No installation needed |
+| http | Built-in | HTTP server and client | No installation needed |
 | express-rate-limit | External | Rate limiting | `npm install express-rate-limit` |
 | express.json() | Built-in (Express 4.16.0+) | JSON body parsing | No installation needed |
 | express.urlencoded() | Built-in (Express 4.16.0+) | Form data parsing | No installation needed |
