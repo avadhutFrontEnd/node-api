@@ -21,6 +21,14 @@ This document provides detailed information about all the libraries and modules 
 ### External Libraries
 - **1. Express**
   - 1.1. App.use() - Understanding Express Middleware
+  - 1.2. Middleware: Global vs Path, app.use vs app.METHOD, Types
+    - 1.2.1. Adding Middleware: Global and Path-Level
+    - 1.2.2. app.use() vs app.get() / app.post() / … app.delete()
+    - 1.2.3. app.use(path, Middleware, Router) and Mounting Routers
+    - 1.2.4. Types of Middleware (Application, Router, Custom, Error, Built-in, Third-party)
+  - 1.2.5. Middleware Execution Order and next()
+  - 1.2.6. Middleware Signature, Recommended Order, Async, and Param
+  - 1.2.7. Quick Reference
 - **2. MySQL2 (Promise-based)**
   - 2.0. Connection Methods: Pool vs Single Connection
   - 2.1. Step 1: Create Connection Pool (`createPool`)
@@ -31,39 +39,98 @@ This document provides detailed information about all the libraries and modules 
   - 2.6. Transactions (Using getConnection)
   - 2.7. Complete Real-World Example (Your Pattern)
   - 2.8. Quick Reference: Methods You'll Use Daily
-- **3. Dotenv**
-- **4. CORS**
-- **5. Multer**
-  - 5.1. Understanding File Upload Request Structure
-  - 5.2. Understanding Callback Parameters: `(req, file, cb)`
-  - 5.3. Multer Methods
-  - 5.4. Multer Configuration Options
-  - 5.5. Request Object Structure After Multer
-  - 5.6. How File Storage Works: Disk vs Database
-  - 5.7. File Upload Security: Critical Best Practices
-    - 5.7.1. Security Best Practices
-    - 5.7.2. Secure Implementation Example
-    - 5.7.3. Security Checklist
-    - 5.7.4. Common Attack Vectors and Prevention
-    - 5.7.5. Quick Security Fixes for Your Current Code
-  - 5.8. Complete Real-World Example
-- **10. Express Rate Limit**
+- **3. PostgreSQL (pg)**
+  - 3.0. Connection Methods: Pool vs Client
+  - 3.1. Key Differences from MySQL2
+  - 3.2. Parameterized Queries (PostgreSQL Style)
+  - 3.3. Quick Reference
+- **4. MongoDB (Mongoose & mongodb driver)**
+  - 4.0. Connection Methods (Mongoose connect / MongoClient)
+  - 4.1. Mongoose vs mongodb Driver
+  - 4.2. Mongoose Connection Options
+  - 4.3. Quick Reference
+- **5. Dotenv**
+- **6. CORS**
+- **7. Multer**
+  - 7.1. Understanding File Upload Request Structure
+  - 7.2. Understanding Callback Parameters: `(req, file, cb)`
+  - 7.3. Multer Methods
+  - 7.4. Multer Configuration Options
+  - 7.5. Request Object Structure After Multer
+  - 7.6. How File Storage Works: Disk vs Database
+  - 7.7. File Upload Security: Critical Best Practices
+    - 7.7.1. Security Best Practices
+    - 7.7.2. Secure Implementation Example
+    - 7.7.3. Security Checklist
+    - 7.7.4. Common Attack Vectors and Prevention
+    - 7.7.5. Quick Security Fixes for Your Current Code
+  - 7.8. Complete Real-World Example
+- **12. Express Rate Limit**
+- **18. Morgan**
+  - 18.1. What Morgan Does (HTTP Request Logger)
+  - 18.2. Installation and Basic Usage
+  - 18.3. Predefined Formats (dev, combined, common, short, tiny)
+  - 18.4. Custom Format and Options
+  - 18.5. When to Use Morgan (Dev vs Production)
+  - 18.6. Quick Reference
+- **19. Config (node-config)**
+  - 19.1. What Config Does (Configuration by Environment)
+  - 19.2. Installation and Folder Structure
+  - 19.3. File Loading Order and NODE_ENV
+  - 19.4. Using config.get() and Nested Keys
+  - 19.5. Config vs Dotenv (When to Use Which)
+    - custom-environment-variables.json: Explanation and Example
+    - 19.5.1. Config with Dotenv: Complete Examples
+  - 19.6. Quick Reference
+- **20. Debug**
+  - 20.1. What Debug Does (Namespace-Based Logging)
+  - 20.2. Installation and Basic Usage
+  - 20.3. DEBUG Environment Variable and Namespaces
+  - 20.4. Enabling and Disabling (Unix, CMD, PowerShell)
+  - 20.5. When to Use Debug vs console.log vs Morgan
+  - 20.6. Quick Reference
 
 ### Built-in Node.js Modules
-- **6. Path (Node.js Built-in)**
-- **7. FS (Node.js Built-in)**
-- **8. OS (Node.js Built-in)**
-- **9. HTTP (Node.js Built-in)**
+- **8. Path (Node.js Built-in)**
+- **9. FS (Node.js Built-in)**
+- **10. OS (Node.js Built-in)**
+- **11. HTTP (Node.js Built-in)**
 
 ### Express Built-in Middleware
-- **11. Express.json() and Body Parser Relationship**
-- **12. Express.urlencoded() - Understanding URL-Encoded Form Data**
-- **13. Express.static() - Serving Static Files**
-- **14. Body Parser (Deprecated)**
+- **13. Express.json() and Body Parser Relationship**
+- **14. Express.urlencoded() - Understanding URL-Encoded Form Data**
+- **15. Express.static() - Serving Static Files**
+- **16. Body Parser (Deprecated)**
+
+### Testing with Postman
+- **17. Testing with Postman**
+  - 17.1. Why Headers and Settings Matter
+  - 17.2. Content-Type: Sending JSON, Form Data, and Files
+  - 17.3. Authorization: Bearer Token, Basic Auth, API Key
+  - 17.4. Request Body Types in Postman (raw, form-data, urlencoded)
+  - 17.5. Query Parameters vs Request Body
+  - 17.6. Common Headers Quick Reference
+  - 17.7. Environment Variables and Workflow
+  - 17.8. Scenario Checklist and Examples
+  - 17.9. HTTP Status Codes and Reading the Response
+  - 17.10. Path Parameters vs Query Parameters
+  - 17.11. Accept Header and Response Format
+  - 17.12. Cookie-Based Authentication
+  - 17.13. Pre-request Scripts and Tests Tab
+  - 17.14. SSL Certificate Verification (Local / Dev)
+  - 17.15. PATCH vs PUT vs DELETE
+  - 17.16. Multiple Files Upload and Form-Data Details
+  - 17.17. Collection vs Environment Variables
+  - 17.18. Troubleshooting: Common Mistakes and Fixes
+  - 17.19. Response Time and Response Headers
+  - 17.20. Saving Token from Response (Tests Tab After Login)
+  - 17.21. URL and Method Details (Trailing Slash, GET Body, 413)
+  - 17.22. PATCH and DELETE Scenarios
+  - 17.23. Collection Runner and Quick Tips
 
 ---
 
-**Note:** Sections are organized by category for easier navigation. The numbering (0-14) follows the order of appearance in the document.
+**Note:** Sections are organized by category for easier navigation. The numbering (0-17) follows the order of appearance in the document.
 
 ---
 
@@ -1475,6 +1542,422 @@ app.use('/api', middleware);  // ✅ Correct
 
 ---
 
+### 1.2. Middleware: Global vs Path, app.use vs app.METHOD, Types
+
+This section goes deeper into **where** and **how** middleware is added (global vs path), the difference between **app.use()** and **app.get() / app.post() / … app.delete()**, mounting routers, and the **types** of middleware in Express.
+
+---
+
+#### 1.2.1. Adding Middleware: Global and Path-Level
+
+**Global middleware** — Runs for **every** request, regardless of path or method. Use when the middleware must run for all routes (e.g. CORS, body parsers, request ID).
+
+```javascript
+// No path = applies to ALL routes
+app.use(express.json());
+app.use(cors());
+app.use((req, res, next) => {
+  req.requestId = generateId();
+  next();
+});
+
+// Every request (GET /, GET /api/users, POST /api/login, etc.) goes through these
+```
+
+**Path-level middleware** — Runs only for requests whose path **starts with** the given path. Use when the middleware is only needed for a subset of routes (e.g. API auth, rate limit for /api).
+
+```javascript
+// Only requests starting with /api go through this
+app.use('/api', apiAuthMiddleware);
+
+// Only requests starting with /admin go through this
+app.use('/admin', adminAuthMiddleware);
+
+// Only requests starting with /uploads (e.g. /uploads/photo.jpg) go through this
+app.use('/uploads', express.static('uploads'));
+```
+
+**Path matching rules:**
+
+- `app.use('/api', mw)` matches `/api`, `/api/users`, `/api/users/1`, `/api/v1/orders`, etc. It does **not** match `/apix` or `/api-users`.
+- Path is a **prefix** match. For exact path match, define a route: `app.get('/api', handler)`.
+- You can use a **router** as middleware: `app.use('/api', apiRouter)` — see 1.2.3.
+
+**Multiple middleware on the same path:**
+
+```javascript
+app.use('/api', cors(), express.json(), rateLimiter, apiRouter);
+// Order: cors → express.json → rateLimiter → apiRouter (for requests to /api*)
+```
+
+---
+
+#### 1.2.2. app.use() vs app.get() / app.post() / … app.delete()
+
+| Aspect | app.use([path], middleware...) | app.get(path, handler...) / app.post(...) / app.put(...) / app.delete(...) |
+|--------|-------------------------------|-----------------------------------------------------------------------------|
+| **HTTP method** | **All methods** (GET, POST, PUT, DELETE, PATCH, etc.) that match the path. | **Only the method** you specify (e.g. `app.get` only for GET). |
+| **Path** | Optional. No path = all paths. With path = prefix match (e.g. `/api` matches `/api/*`). | Required. Exact or parameterized path (e.g. `/api/users`, `/api/users/:id`). |
+| **Typical use** | Mount middleware (parsers, auth, routers) that run **before** a final response. | Define **route handlers** that send the response (or pass to next). |
+| **Multiple handlers** | Yes: `app.use(mw1, mw2, mw3)`. | Yes: `app.get('/x', mw1, mw2, handler)` — mw1, mw2 run in order, then handler. |
+
+**app.use() — all methods:**
+
+```javascript
+app.use('/api', (req, res, next) => {
+  console.log('Runs for GET, POST, PUT, DELETE, PATCH, ... to /api*');
+  next();
+});
+```
+
+**app.METHOD() — one method per route:**
+
+```javascript
+app.get('/api/users', getUsers);       // Only GET /api/users
+app.post('/api/users', createUser);    // Only POST /api/users
+app.put('/api/users/:id', updateUser); // Only PUT /api/users/:id
+app.delete('/api/users/:id', deleteUser); // Only DELETE /api/users/:id
+app.patch('/api/users/:id', patchUser);   // Only PATCH /api/users/:id
+```
+
+**Using both: middleware + route handler on the same path**
+
+You can attach multiple functions to a **route**; they run in order. The last one usually sends the response.
+
+```javascript
+// Middleware then handler for GET /api/users
+app.get('/api/users', authMiddleware, (req, res) => {
+  res.json({ users: [] });
+});
+
+// Same idea: multiple middleware + handler
+app.post('/api/orders', validateBody, authMiddleware, createOrderHandler);
+```
+
+**Summary:**
+
+- **app.use()** — “For this path (or all paths), run these middleware for **every** HTTP method.”
+- **app.get()**, **app.post()**, etc. — “For this method + path, run these handlers (middleware + final handler).”
+
+---
+
+#### 1.2.3. app.use(path, Middleware, Router) and Mounting Routers
+
+You can mount a **router** (or several middleware + router) at a path. The router is just middleware that dispatches to its own routes.
+
+**Mounting a router:**
+
+```javascript
+const express = require('express');
+const app = express();
+const apiRouter = require('./routes/api');  // Router with its own .get(), .post(), etc.
+
+// All routes defined on apiRouter are under /api
+app.use('/api', apiRouter);
+// So apiRouter.get('/users', ...) is actually GET /api/users
+//     apiRouter.post('/orders', ...) is actually POST /api/orders
+```
+
+**app.use(path, middleware, router)** — Run one or more middleware for that path, then the router:
+
+```javascript
+// For any request to /api*, run authMiddleware first, then apiRouter
+app.use('/api', authMiddleware, apiRouter);
+
+// Multiple middleware then router
+app.use('/api', cors(), express.json(), rateLimiter, authMiddleware, apiRouter);
+```
+
+**Router as middleware:**  
+A **Router** instance is middleware. When you do `app.use('/api', apiRouter)`:
+
+1. Request comes in for e.g. GET /api/users.
+2. Express matches path `/api` and runs `apiRouter` (and any middleware before it).
+3. The router strips the prefix and matches its own routes (e.g. `/users`).
+4. The matching route handler on the router runs.
+
+**Example: router file (routes/api.js):**
+
+```javascript
+const express = require('express');
+const router = express.Router();  // Router, not app
+
+router.get('/users', (req, res) => res.json({ users: [] }));
+router.post('/users', (req, res) => res.status(201).json({ id: 1 }));
+router.get('/users/:id', (req, res) => res.json({ user: {} }));
+
+module.exports = router;
+```
+
+**Main app:**
+
+```javascript
+const apiRouter = require('./routes/api');
+app.use(express.json());
+app.use('/api', apiRouter);  // GET /api/users, POST /api/users, GET /api/users/:id
+```
+
+**Path in router is relative to mount path:**  
+- Mount: `app.use('/api', apiRouter)`.  
+- Router route: `router.get('/users', ...)`.  
+- Full path: `/api` + `/users` = **GET /api/users**.
+
+---
+
+#### 1.2.4. Types of Middleware (Application, Router, Custom, Error, Built-in, Third-party)
+
+**1. Application-level middleware**  
+Bound to the **app** instance with `app.use()` or `app.METHOD()`. Runs for every request (or every request matching a path/method).
+
+```javascript
+app.use(express.json());
+app.use('/api', apiAuth);
+app.get('/health', (req, res) => res.send('OK'));
+```
+
+**2. Router-level middleware**  
+Bound to a **Router** instance with `router.use()` or `router.METHOD()`. Runs only when the router is hit (e.g. when mounted at `/api`).
+
+```javascript
+const router = express.Router();
+router.use(authForApi);           // All routes on this router
+router.get('/users', getUsers);
+router.post('/users', createUser);
+app.use('/api', router);
+```
+
+**3. Custom middleware (user-defined)**  
+Functions **you write** that follow the middleware signature: `(req, res, next) => { ... }`. They are not from Express (built-in) or npm (third-party); they are your own logic (auth, logging, request ID, validation, etc.).
+
+```javascript
+// Custom middleware: add request ID to every request
+function requestIdMiddleware(req, res, next) {
+  req.requestId = crypto.randomUUID();
+  next();
+}
+
+// Custom middleware: check auth for /api routes
+function authMiddleware(req, res, next) {
+  const token = req.headers.authorization;
+  if (!token) return res.status(401).json({ error: 'Unauthorized' });
+  req.user = decodeToken(token);  // your logic
+  next();
+}
+
+// Custom middleware: log request time
+function logTimeMiddleware(req, res, next) {
+  req.startTime = Date.now();
+  res.on('finish', () => {
+    console.log(`${req.method} ${req.url} ${Date.now() - req.startTime}ms`);
+  });
+  next();
+}
+
+// Use your custom middleware (global or path-level)
+app.use(requestIdMiddleware);
+app.use('/api', authMiddleware);
+app.use(logTimeMiddleware);
+```
+
+**Rules for custom middleware:**  
+- Signature: `(req, res, next)` — three arguments. Express uses this to recognize middleware.  
+- Call **next()** to pass control to the next middleware or route; otherwise the request hangs.  
+- Call **next(err)** to pass an error to error-handling middleware.  
+- Optionally send a response (e.g. `res.status(401).json(...)`) and **do not** call `next()` if you want to end the chain (e.g. reject unauthorized).
+
+**4. Error-handling middleware**  
+Has **four** arguments: `(err, req, res, next)`. Express treats it as error middleware and runs it when something calls `next(err)` or throws in a route/middleware.
+
+```javascript
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: 'Something went wrong' });
+});
+```
+
+- Must be defined **after** routes and other middleware so errors from them can be passed here.
+- If you call `next()` with no argument, Express continues to the next non-error middleware; if you call `next(err)`, Express jumps to the next error middleware.
+
+**5. Built-in middleware**  
+Provided by Express (no extra install):
+
+| Middleware | Purpose |
+|------------|--------|
+| **express.json()** | Parses JSON body → `req.body`. |
+| **express.urlencoded({ extended: true })** | Parses form body → `req.body`. |
+| **express.static(root)** | Serves static files from a directory. |
+| **express.Router()** | Creates a router (mini app) to mount with `app.use(path, router)`. |
+
+**6. Third-party middleware**  
+From npm: **cors**, **morgan**, **helmet**, **express-rate-limit**, **multer**, etc. You mount them with `app.use()` (global or path-level).
+
+```javascript
+const cors = require('cors');
+const morgan = require('morgan');
+app.use(cors());
+app.use(morgan('dev'));
+```
+
+---
+
+#### 1.2.5. Middleware Execution Order and next()
+
+**Order:**  
+Middleware runs in the **order** it is defined. Request flows: first global middleware, then path-matched middleware, then route handlers (or router’s middleware and routes). If any middleware sends a response (e.g. `res.send()`) and does not call `next()`, the chain **stops** — later middleware and route handlers for that request are not run.
+
+**next():**  
+- **next()** — Pass control to the **next** middleware or route handler.  
+- **next(err)** — Pass an error to Express; Express skips to the **next error-handling** middleware (4-arg function).  
+- If you never call `next()` and never send a response, the request will **hang** (client waits forever).
+
+**Example flow:**
+
+```javascript
+app.use((req, res, next) => {
+  console.log('1. Global');
+  next();
+});
+app.use('/api', (req, res, next) => {
+  console.log('2. /api middleware');
+  next();
+});
+app.get('/api/users', (req, res) => {
+  console.log('3. GET /api/users handler');
+  res.json({ users: [] });
+});
+// Request GET /api/users → logs: 1. Global, 2. /api middleware, 3. GET /api/users handler
+```
+
+**Stopping the chain:**  
+If a middleware (or route) sends a response and does not call `next()`, the chain stops. Example: `express.static()` serves a file and sends the response, so route handlers below are not run for that request.
+
+---
+
+#### 1.2.6. Middleware Signature, Recommended Order, Async, and Param
+
+**How Express recognizes middleware (signature / arity):**  
+Express treats a function as **middleware** or **error-handling middleware** based on the **number of arguments** (arity):
+
+- **3 arguments** — `(req, res, next)` → **Normal middleware**. Runs in the normal chain. Call `next()` to continue or `next(err)` to jump to error middleware.
+- **4 arguments** — `(err, req, res, next)` → **Error-handling middleware**. Express runs it only when an error is passed via `next(err)` or when a previous handler throws. Must be defined **after** routes and other middleware.
+
+So the **name** of the parameters does not matter to Express; only the **length** of the function signature does. By convention we use `(req, res, next)` and `(err, req, res, next)`.
+
+---
+
+**Recommended loading order (best practice):**  
+Define middleware and routes in this order so parsing, auth, and errors behave correctly:
+
+1. **Body parsers and global config** — `express.json()`, `express.urlencoded()`, `cors()`, etc., so `req.body` and headers are ready.
+2. **Custom middleware** (auth, logging, request ID) — so they run for all (or path-matched) requests before routes.
+3. **Routes** — `app.get()`, `app.post()`, `app.use('/api', router)`, etc.
+4. **Static files** (optional) — `express.static()` for assets; often before "catch-all" so specific routes are tried first.
+5. **404 handler** (optional) — route that runs when no route matched; e.g. `app.use((req, res) => res.status(404).send('Not found'))`.
+6. **Error-handling middleware** — `app.use((err, req, res, next) => { ... })` **last**, so any `next(err)` from above is caught.
+
+Example:
+
+```javascript
+app.use(express.json());
+app.use(cors());
+app.use(requestIdMiddleware);
+app.use('/api', authMiddleware);
+app.get('/api/users', getUsers);
+app.use(express.static('public'));
+app.use((req, res) => res.status(404).json({ error: 'Not found' }));
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: 'Internal server error' });
+});
+```
+
+---
+
+**Async middleware:**  
+If you use **async/await** inside middleware (or a route handler), Express does **not** catch rejected promises. You must catch errors and call **next(err)** yourself; otherwise the request may hang and the client will not get a response.
+
+```javascript
+// ❌ Wrong: unhandled rejection if getUserId() throws or rejects
+app.use('/api', async (req, res, next) => {
+  req.user = await getUserId(req);
+  next();
+});
+
+// ✅ Right: catch and pass to error handler
+app.use('/api', async (req, res, next) => {
+  try {
+    req.user = await getUserId(req);
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+```
+
+Alternatively, wrap async middleware in a helper that forwards rejections to `next` (e.g. a small "asyncHandler" wrapper). The important point: **any async middleware must eventually call next(err) on failure**.
+
+---
+
+**Param middleware (router.param()):**  
+**Param middleware** runs when a route has a **parameter** (e.g. `:id`) and is useful to load or validate a resource once before any route that uses that param.
+
+```javascript
+const router = express.Router();
+
+// Runs when any route on this router has :id in its path
+router.param('id', (req, res, next, id) => {
+  // Load user by id, attach to req, or call next(err) if not found
+  User.findById(id)
+    .then((user) => {
+      if (!user) return next(new Error('Not found'));
+      req.user = user;
+      next();
+    })
+    .catch(next);
+});
+
+router.get('/users/:id', (req, res) => {
+  // req.user is already set by param middleware
+  res.json(req.user);
+});
+```
+
+- **Signature:** `(req, res, next, paramValue)` — the fourth argument is the value of the param (e.g. `id` for `:id`).
+- Only applies to the **router** on which it is defined (and that router’s routes). It runs **before** the route handler for any route that includes that parameter.
+
+---
+
+**res.locals and app.locals:**  
+- **res.locals** — An object for request-scoped data. You can set properties (e.g. `res.locals.user = req.user`) in middleware; they are available in later middleware and in route handlers, and often in templates (e.g. `res.render('view', { ...res.locals })`). Useful to pass data from middleware to the next handler or view without mutating `req`.
+- **app.locals** — Application-scoped data (e.g. app name, config) available as `req.app.locals` in every request. Set once at startup.
+
+---
+
+#### 1.2.7. Quick Reference
+
+| Goal | Code |
+|------|------|
+| Global middleware (all routes) | `app.use(middleware)` |
+| Path-level middleware | `app.use('/api', middleware)` |
+| Multiple middleware on path | `app.use('/api', mw1, mw2, router)` |
+| Route: one method + path | `app.get('/path', handler)` or `app.post('/path', mw, handler)` |
+| Mount router at path | `app.use('/api', apiRouter)` |
+| Error-handling middleware | `app.use((err, req, res, next) => { ... })` |
+| Router-level middleware | `router.use(middleware)` or `router.get('/path', handler)` |
+| Custom middleware | `(req, res, next) => { ...; next(); }` — 3 args; call next() or next(err). |
+| Param middleware | `router.param('id', (req, res, next, id) => { ... })` — runs when route has :id. |
+| Recommended order | Parsers → custom → routes → static → 404 → error handler. |
+| Async middleware | Wrap in try/catch and call next(err) on failure; Express does not catch async rejections. |
+
+**Rules to remember:**  
+1. Middleware before routes (order matters).  
+2. `app.use()` = all methods for that path (or all paths); `app.get()` / `app.post()` etc. = one method + path.  
+3. Path in `app.use('/api', router)` is a **prefix**; router paths are **relative** to that prefix.  
+4. Call `next()` (or `next(err)` for errors) unless you send a response and want to end the chain.  
+5. **Signature:** 3 args `(req, res, next)` = normal middleware; 4 args `(err, req, res, next)` = error middleware (Express uses function arity).
+
+---
+
 ## 2. MySQL2 (Promise-based)
 
 **Package:** `mysql2/promise`  
@@ -1557,9 +2040,9 @@ await connection.end();
 
 ---
 
-## Comparison: Pool vs Single Connection
+### Comparison: Pool vs Single Connection
 
-### Performance Comparison
+#### Performance Comparison
 
 | Aspect | Connection Pool | Single Connection |
 |--------|----------------|-------------------|
@@ -1569,9 +2052,9 @@ await connection.end();
 | **Concurrent Queries** | ✅ Handles multiple simultaneously | ❌ One at a time |
 | **Best For** | Production, high traffic | Development, simple scripts |
 
-### Detailed Comparison
+#### Detailed Comparison
 
-#### 1. Connection Management
+##### 1. Connection Management
 
 **Pool:**
 ```javascript
@@ -1597,7 +2080,7 @@ await connection2.query('SELECT * FROM products');
 await connection2.end();
 ```
 
-#### 2. Concurrent Requests
+##### 2. Concurrent Requests
 
 **Pool (Handles Multiple Simultaneously):**
 ```javascript
@@ -1623,7 +2106,7 @@ await conn2.end();
 // ❌ Sequential, slower
 ```
 
-#### 3. Resource Usage
+##### 3. Resource Usage
 
 **Pool:**
 - Keeps connections alive (uses memory)
@@ -1635,7 +2118,7 @@ await conn2.end();
 - Better for occasional queries
 - Lower memory usage
 
-#### 4. Error Handling
+##### 4. Error Handling
 
 **Pool:**
 ```javascript
@@ -1663,9 +2146,9 @@ try {
 
 ---
 
-## When to Use Each Method
+### When to Use Each Method
 
-### Use Connection Pool (`createPool`) When:
+#### Use Connection Pool (`createPool`) When:
 
 ✅ **Production applications** - Your current use case  
 ✅ **High traffic** - Many concurrent requests  
@@ -1697,7 +2180,7 @@ app.get('/api/products', async (req, res) => {
 // Both can run simultaneously using different pool connections
 ```
 
-### Use Single Connection (`createConnection`) When:
+#### Use Single Connection (`createConnection`) When:
 
 ✅ **Simple scripts** - One-time operations  
 ✅ **CLI tools** - Command-line utilities  
@@ -1723,9 +2206,9 @@ await connection.end();
 
 ---
 
-## Code Examples: Pool vs Single Connection
+### Code Examples: Pool vs Single Connection
 
-### Example 1: Handling Multiple Requests
+#### Example 1: Handling Multiple Requests
 
 **With Pool (Your Current Approach):**
 ```javascript
@@ -1768,7 +2251,7 @@ app.get('/products', async (req, res) => {
 });
 ```
 
-### Example 2: Performance Test
+#### Example 2: Performance Test
 
 **Pool (Fast):**
 ```javascript
@@ -1799,9 +2282,9 @@ console.log(`Time: ${Date.now() - start}ms`); // ~1000ms
 
 ---
 
-## Pool Configuration Explained
+### Pool Configuration Explained
 
-### Why `connectionLimit: 10`?
+#### Why `connectionLimit: 10`?
 
 ```javascript
 const pool = mysql.createPool({
@@ -1831,7 +2314,7 @@ Request 11-15 → Waiting in queue
 // When Connection 1 finishes, Request 11 uses it
 ```
 
-### Pool Options You Should Know
+#### Pool Options You Should Know
 
 ```javascript
 const pool = mysql.createPool({
@@ -1845,9 +2328,9 @@ const pool = mysql.createPool({
 
 ---
 
-## Common Mistakes
+### Common Mistakes
 
-### ❌ Mistake 1: Creating Pool for Each Request
+#### ❌ Mistake 1: Creating Pool for Each Request
 
 ```javascript
 // ❌ WRONG - Creates new pool every time
@@ -1871,7 +2354,7 @@ app.get('/users', async (req, res) => {
 });
 ```
 
-### ❌ Mistake 2: Using Single Connection in Production
+#### ❌ Mistake 2: Using Single Connection in Production
 
 ```javascript
 // ❌ WRONG - For production server
@@ -1898,7 +2381,7 @@ app.get('/users', async (req, res) => {
 });
 ```
 
-### ❌ Mistake 3: Not Closing Single Connections
+#### ❌ Mistake 3: Not Closing Single Connections
 
 ```javascript
 // ❌ WRONG - Connection stays open
@@ -1920,7 +2403,7 @@ try {
 
 ---
 
-## Summary: Pool vs Single Connection
+### Summary: Pool vs Single Connection
 
 | Feature | Pool (`createPool`) | Single Connection (`createConnection`) |
 |---------|-------------------|----------------------------------------|
@@ -2472,7 +2955,274 @@ npm install mysql2
 
 ---
 
-## 3. Dotenv
+## 3. PostgreSQL (pg)
+
+**Package:** `pg`  
+**Type:** External NPM Package  
+**Purpose:** PostgreSQL database client for Node.js
+
+### Description
+`pg` (node-postgres) is the most popular PostgreSQL client for Node.js. It supports connection pooling, promises/async-await, parameterized queries (`$1`, `$2`), and is used in your `postgreSQL-server` project.
+
+---
+
+### 3.0. Connection Methods: Pool vs Client
+
+PostgreSQL with `pg` offers two main ways to connect, similar to MySQL2.
+
+### Method 1: Connection Pool (`new Pool`) - Recommended (What You Use)
+
+**What it is:**
+- A pool of reusable database connections
+- Create once at startup, reuse for all queries
+- Automatically manages connection lifecycle
+
+**How it works:**
+```
+Application Start
+    ↓
+new Pool() → Pool with max clients (e.g. 10)
+    ↓
+pool.query() → Uses a client from pool → Returns client to pool
+pool.connect() → Get a client for transactions → client.release()
+```
+
+**Your Current Code (postgreSQL-server):**
+```javascript
+const { Pool } = require("pg");
+
+const pool = new Pool({
+  host: process.env.DB_HOST || "localhost",
+  user: process.env.DB_USER || "postgres",
+  password: process.env.DB_PASSWORD || "",
+  database: process.env.DB_NAME || "myapp_db",
+  port: process.env.DB_PORT || 5432,
+  max: 10,                        // Maximum clients in the pool
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
+});
+
+// Use pool directly for queries
+const result = await pool.query("SELECT * FROM users");
+// result.rows = array of rows
+
+// Optional: get a client for transactions
+const client = await pool.connect();
+try {
+  await client.query("BEGIN");
+  await client.query("INSERT INTO users ...");
+  await client.query("COMMIT");
+} finally {
+  client.release();
+}
+```
+
+### Method 2: Single Client (`new Client`)
+
+**What it is:**
+- One database connection
+- You must connect, use, and end it yourself
+- Good for scripts, not for long-running servers
+
+**Example:**
+```javascript
+const { Client } = require("pg");
+
+const client = new Client({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT || 5432,
+});
+
+await client.connect();
+const result = await client.query("SELECT * FROM users");
+await client.end();  // Must close when done
+```
+
+---
+
+### 3.1. Key Differences from MySQL2
+
+| Aspect | MySQL2 | PostgreSQL (pg) |
+|--------|--------|-----------------|
+| **Import** | `require('mysql2/promise')` | `const { Pool } = require('pg')` |
+| **Create pool** | `mysql.createPool({...})` | `new Pool({...})` |
+| **Placeholders** | `?` (e.g. `WHERE id = ?`) | `$1`, `$2` (e.g. `WHERE id = $1`) |
+| **Result rows** | `[rows] = await pool.query(...)` | `result.rows` from `await pool.query(...)` |
+| **Get connection** | `pool.getConnection()` | `pool.connect()` → returns client |
+| **Release connection** | `connection.release()` | `client.release()` |
+
+### 3.2. Parameterized Queries (PostgreSQL Style)
+
+Always use `$1`, `$2`, etc. to avoid SQL injection:
+
+```javascript
+// SELECT with parameters
+const result = await pool.query(
+  "SELECT * FROM users WHERE id = $1 AND email = $2",
+  [userId, email]
+);
+
+// INSERT with RETURNING (get inserted row)
+const result = await pool.query(
+  "INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id",
+  [name, email]
+);
+const newId = result.rows[0].id;
+
+// UPDATE / DELETE
+await pool.query("UPDATE users SET name = $1 WHERE id = $2", [name, id]);
+await pool.query("DELETE FROM users WHERE id = $1", [id]);
+```
+
+### 3.3. Quick Reference
+
+| Method | When to Use | Example |
+|--------|-------------|---------|
+| `new Pool(config)` | Once at app startup | `const pool = new Pool({...})` |
+| `pool.query(text, [params])` | Most queries | `await pool.query('SELECT * FROM users WHERE id = $1', [id])` |
+| `pool.connect()` | Transactions or need a held client | `const client = await pool.connect()` |
+| `client.release()` | After using a client from pool | `client.release()` |
+| `client.query()` | When using a checked-out client | `await client.query('...')` |
+
+### Installation
+```bash
+npm install pg
+```
+
+---
+
+## 4. MongoDB (Mongoose & mongodb driver)
+
+**Packages:** `mongoose` (ODM) or `mongodb` (native driver)  
+**Type:** External NPM Package  
+**Purpose:** Connect to MongoDB and work with documents
+
+### Description
+- **Mongoose:** ODM (Object Document Mapper) for MongoDB. You define schemas, get validation, middleware, and a promise-based API. Used in your `Mongodb-server` project.
+- **mongodb (driver):** Official low-level driver. No schemas; you work with raw documents and the MongoDB API.
+
+---
+
+### 4.0. Connection Methods
+
+MongoDB is different from SQL: it typically uses a **single connection URL**; the driver (or Mongoose) manages a connection pool internally.
+
+### Method 1: Mongoose (What You Use) - Single `connect()` Call
+
+**What it is:**
+- One `mongoose.connect(uri)` at startup
+- Mongoose keeps a connection pool under the hood
+- You use Models (e.g. `User.find()`) for all queries
+
+**Your Current Code (Mongodb-server):**
+```javascript
+const mongoose = require("mongoose");
+
+async function connectDatabase() {
+  try {
+    await mongoose.connect(
+      process.env.MONGODB_URI || "mongodb://localhost:27017/myapp_db"
+    );
+    console.log("✅ Database connected successfully");
+  } catch (error) {
+    console.error("❌ Database connection failed:", error.message);
+    process.exit(1);
+  }
+}
+
+connectDatabase();
+
+// Later: use models
+// const user = await User.findOne({ email });
+```
+
+**Connection URI format:**
+```
+mongodb://localhost:27017/myapp_db
+mongodb://username:password@host:27017/dbname?authSource=admin
+mongodb+srv://user:pass@cluster.mongodb.net/dbname  (Atlas)
+```
+
+### Method 2: Native mongodb Driver - MongoClient
+
+**What it is:**
+- Use the `mongodb` package and `MongoClient.connect(uri)`
+- You get a `client`; use `client.db('dbName')` to get a database, then collections
+- No schemas; you work with plain JavaScript objects
+
+**Example:**
+```javascript
+const { MongoClient } = require("mongodb");
+
+const uri = process.env.MONGODB_URI || "mongodb://localhost:27017";
+const client = new MongoClient(uri);
+
+async function run() {
+  await client.connect();
+  const db = client.db("myapp_db");
+  const users = db.collection("users");
+
+  const doc = await users.findOne({ email: "test@example.com" });
+  await users.insertOne({ name: "Jane", email: "jane@example.com" });
+
+  await client.close();  // For scripts: close when done
+}
+```
+
+For long-running apps (e.g. Express), you typically connect once and reuse the same `client` (or use Mongoose), similar to a pool in SQL.
+
+---
+
+### 4.1. Mongoose vs mongodb Driver
+
+| Aspect | Mongoose | mongodb driver |
+|--------|----------|----------------|
+| **Connect** | `mongoose.connect(uri)` | `MongoClient.connect(uri)` |
+| **Schema** | Yes (models, validation) | No (plain documents) |
+| **Queries** | `User.find()`, `User.findById()` | `collection.find()`, `collection.findOne()` |
+| **Best for** | Apps that want structure, validation, relations | Full control, simple scripts, no schema |
+
+### 4.2. Mongoose Connection Options (Optional)
+
+```javascript
+await mongoose.connect(uri, {
+  maxPoolSize: 10,
+  serverSelectionTimeoutMS: 5000,
+});
+```
+
+### 4.3. Quick Reference
+
+**Mongoose (your pattern):**
+| Method | When to Use | Example |
+|--------|-------------|---------|
+| `mongoose.connect(uri)` | Once at app startup | `await mongoose.connect(process.env.MONGODB_URI)` |
+| `mongoose.connection` | Check state, use `mongoose.connection.db` for raw DB | `mongoose.connection.db` |
+| Model methods | All CRUD | `User.find()`, `User.create()`, `User.findByIdAndUpdate()` |
+
+**mongodb driver:**
+| Method | When to Use | Example |
+|--------|-------------|---------|
+| `MongoClient.connect(uri)` | Once (or per script run) | `const client = await MongoClient.connect(uri)` |
+| `client.db(name)` | Get database | `const db = client.db('myapp_db')` |
+| `db.collection(name)` | Get collection | `const users = db.collection('users')` |
+| `collection.find()`, `.findOne()`, `.insertOne()`, etc. | CRUD | `await users.findOne({ email })` |
+
+### Installation
+```bash
+# Mongoose (includes connection + ODM)
+npm install mongoose
+
+# Or only the official driver (no ODM)
+npm install mongodb
+```
+
+---
+
+## 5. Dotenv
 
 **Package:** `dotenv`  
 **Type:** External NPM Package  
@@ -2525,7 +3275,7 @@ npm install dotenv
 
 ---
 
-## 4. CORS
+## 6. CORS
 
 **Package:** `cors`  
 **Type:** External NPM Package  
@@ -2562,7 +3312,7 @@ npm install cors
 
 ---
 
-## 5. Multer
+## 7. Multer
 
 **Package:** `multer`  
 **Type:** External NPM Package  
@@ -2573,7 +3323,7 @@ Multer is a middleware for handling `multipart/form-data`, which is primarily us
 
 ---
 
-### 5.1. Understanding File Upload Request Structure
+### 7.1. Understanding File Upload Request Structure
 
 ### What is `multipart/form-data`?
 
@@ -2646,7 +3396,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
 
 ---
 
-### 5.2. Understanding Callback Parameters: `(req, file, cb)`
+### 7.2. Understanding Callback Parameters: `(req, file, cb)`
 
 ### What are these parameters?
 
@@ -2749,7 +3499,7 @@ const storage = multer.diskStorage({
 
 ---
 
-### 5.3. Multer Methods
+### 7.3. Multer Methods
 
 Multer provides different methods to handle various upload scenarios:
 
@@ -2876,7 +3626,7 @@ app.post('/form', upload.none(), (req, res) => {
 
 ---
 
-### 5.4. Multer Configuration Options
+### 7.4. Multer Configuration Options
 
 ### Basic Configuration
 
@@ -3088,7 +3838,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
 
 ---
 
-### 5.5. Request Object Structure After Multer
+### 7.5. Request Object Structure After Multer
 
 ### After `upload.single()`
 
@@ -3135,7 +3885,7 @@ console.log(req.body.username);  // "john"
 
 ---
 
-### 5.6. How File Storage Works: Disk vs Database
+### 7.6. How File Storage Works: Disk vs Database
 
 ### Understanding Your Code: Avatar Upload Flow
 
@@ -3431,7 +4181,7 @@ A: Databases are for structured data. Files should be on disk/file storage. Stor
 
 ---
 
-### 5.7. File Upload Security: Critical Best Practices
+### 7.7. File Upload Security: Critical Best Practices
 
 ### ⚠️ Security Risks in File Uploads
 
@@ -3476,7 +4226,7 @@ filename: (req, file, cb) => {
 
 ---
 
-#### 5.7.1. Security Best Practices
+#### 7.7.1. Security Best Practices
 
 ### 1. Filename Sanitization (CRITICAL)
 
@@ -3749,7 +4499,7 @@ app.post('/upload', upload.single('avatar'), async (req, res) => {
 
 ---
 
-#### 5.7.2. Secure Implementation Example
+#### 7.7.2. Secure Implementation Example
 
 **✅ Complete Secure File Upload Configuration:**
 
@@ -3849,7 +4599,7 @@ app.post('/api/users',
 
 ---
 
-#### 5.7.3. Security Checklist
+#### 7.7.3. Security Checklist
 
 **Before deploying file uploads, ensure:**
 
@@ -3868,7 +4618,7 @@ app.post('/api/users',
 
 ---
 
-#### 5.7.4. Common Attack Vectors and Prevention
+#### 7.7.4. Common Attack Vectors and Prevention
 
 ### Attack 1: Path Traversal
 
@@ -3927,7 +4677,7 @@ limits: { fileSize: 5 * 1024 * 1024 }  // 5MB max
 
 ---
 
-#### 5.7.5. Quick Security Fixes for Your Current Code
+#### 7.7.5. Quick Security Fixes for Your Current Code
 
 **Immediate improvements you can make:**
 
@@ -3960,7 +4710,7 @@ app.post('/api/users', upload.single('avatar'), async (req, res) => {
 
 ---
 
-### 5.8. Complete Real-World Example
+### 7.8. Complete Real-World Example
 
 **Frontend (HTML + JavaScript):**
 ```html
@@ -4074,7 +4824,7 @@ npm install multer
 
 ---
 
-## 6. Path (Node.js Built-in)
+## 8. Path (Node.js Built-in)
 
 **Package:** `path`  
 **Type:** Node.js Built-in Module  
@@ -4683,7 +5433,7 @@ This is a built-in Node.js module, no installation needed.
 
 ---
 
-## 7. FS (Node.js Built-in)
+## 9. FS (Node.js Built-in)
 
 **Package:** `fs`  
 **Type:** Node.js Built-in Module  
@@ -5391,7 +6141,7 @@ This is a built-in Node.js module, no installation needed.
 
 ---
 
-## 8. OS (Node.js Built-in)
+## 10. OS (Node.js Built-in)
 
 **Package:** `os`  
 **Type:** Node.js Built-in Module  
@@ -6200,7 +6950,7 @@ This is a built-in Node.js module, no installation needed.
 
 ---
 
-## 9. HTTP (Node.js Built-in)
+## 11. HTTP (Node.js Built-in)
 
 **Package:** `http`  
 **Type:** Node.js Built-in Module  
@@ -6836,7 +7586,7 @@ This is a built-in Node.js module, no installation needed.
 
 ---
 
-## 10. Express Rate Limit
+## 12. Express Rate Limit
 
 **Package:** `express-rate-limit`  
 **Type:** External NPM Package  
@@ -7079,7 +7829,7 @@ npm install express-rate-limit
 
 ---
 
-## 11. Express.json() and Body Parser Relationship
+## 13. Express.json() and Body Parser Relationship
 
 ### What is `express.json()`?
 
@@ -7172,7 +7922,7 @@ app.use(express.json({
 
 ---
 
-## 12. Express.urlencoded() - Understanding URL-Encoded Form Data
+## 14. Express.urlencoded() - Understanding URL-Encoded Form Data
 
 ### What is `express.urlencoded()`?
 
@@ -7475,7 +8225,7 @@ app.post('/contact', (req, res) => {
 
 ---
 
-## 13. Express.static() - Serving Static Files
+## 15. Express.static() - Serving Static Files
 
 ### What is `express.static()`?
 
@@ -7838,7 +8588,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Best pr
 
 ---
 
-## 14. Body Parser (Deprecated)
+## 16. Body Parser (Deprecated)
 
 **Package:** `body-parser`  
 **Type:** External NPM Package (Deprecated)  
@@ -7871,6 +8621,1464 @@ npm install body-parser  # Only if using Express < 4.16.0
 
 ---
 
+## 17. Testing with Postman
+
+This section documents everything a backend developer needs to set in Postman so that the server receives data correctly. Missing or wrong headers/settings cause empty `req.body`, 400 errors, and auth failures. Use this as a reference for all common scenarios.
+
+---
+
+### 17.1. Why Headers and Settings Matter
+
+**What goes wrong when you skip them:**
+
+| You forget / set wrong | What happens on the server |
+|------------------------|----------------------------|
+| **Content-Type: application/json** | Body is not parsed. `req.body` stays `{}`. You get "Name is required" or similar because `req.body.name` is `undefined`. |
+| **Authorization: Bearer &lt;token&gt;** | Protected routes get no token. Server returns 401 Unauthorized. |
+| **Body type** (e.g. raw vs form-data) | Server expects JSON but gets raw text or form data; parsing fails or fields are missing. |
+| **Accept header** (optional) | Server may return HTML or wrong format instead of JSON. |
+
+**Rule:** In Postman, **Headers** and **Body** must match what your backend expects. The sections below tell you exactly what to set and when.
+
+---
+
+### 17.2. Content-Type: Sending JSON, Form Data, and Files
+
+The **Content-Type** header tells the server how the request body is encoded. Express uses it to choose the right parser (`express.json()`, `express.urlencoded()`, or multer for multipart).
+
+#### When you send JSON (e.g. POST/PUT/PATCH with a JSON body)
+
+**You must set:**
+
+- **Header:** `Content-Type: application/json`
+- **Body tab:** **raw** → dropdown set to **JSON**
+
+**Why:** Without `Content-Type: application/json`, Express does **not** run the JSON parser. The raw body is not parsed, so `req.body` remains `{}`. Your validation then fails with "Name is required" or similar.
+
+**Postman steps:**
+
+1. Open your request (e.g. POST `http://localhost:3000/api/courses`).
+2. Go to **Headers**.
+3. Add (or ensure):
+   - **Key:** `Content-Type`
+   - **Value:** `application/json`
+4. Go to **Body**.
+5. Select **raw**.
+6. In the dropdown to the right of "raw", choose **JSON**.
+7. Type or paste your JSON, e.g.:
+```json
+{
+  "name": "React Fundamentals",
+  "author": "Alex Smith",
+  "price": 149,
+  "isPublished": true
+}
+```
+
+**Server side:** You need `app.use(express.json())` so that `req.body` is the parsed object.
+
+---
+
+#### When you send form data (key=value, no files)
+
+**Use when:** API expects `application/x-www-form-urlencoded` (e.g. classic HTML form submit, or login form).
+
+**You must set:**
+
+- **Header:** Usually set automatically by Postman when you pick this body type: `Content-Type: application/x-www-form-urlencoded`
+- **Body tab:** **x-www-form-urlencoded**
+
+**Postman steps:**
+
+1. **Body** → **x-www-form-urlencoded**.
+2. Add key-value rows (e.g. `username`, `password`).
+
+**Server side:** You need `app.use(express.urlencoded({ extended: true }))` so that `req.body` contains the form fields.
+
+---
+
+#### When you send files (multipart/form-data)
+
+**Use when:** Uploading files (images, documents) along with other fields.
+
+**You must set:**
+
+- **Header:** Postman sets it automatically when you use form-data: `Content-Type: multipart/form-data; boundary=...`
+- **Body tab:** **form-data**
+
+**Postman steps:**
+
+1. **Body** → **form-data**.
+2. Add keys. For a file:
+   - In the **Value** column, change type from "Text" to **File**.
+   - Choose file.
+3. Add other fields as Text keys (e.g. `title`, `userId`).
+
+**Server side:** You use **multer** (or similar) to parse multipart data. Do **not** use `express.json()` or `express.urlencoded()` for the multipart route; multer puts files in `req.file` / `req.files` and other fields in `req.body`.
+
+---
+
+### 17.3. Authorization: Bearer Token, Basic Auth, API Key
+
+#### Bearer Token (JWT or session token)
+
+**Use when:** After login you get a token; protected routes expect it in the `Authorization` header.
+
+**You must set:**
+
+- **Header:** `Authorization: Bearer <your-token>`
+
+**Postman steps (recommended):**
+
+1. Go to **Authorization** tab.
+2. **Type:** select **Bearer Token**.
+3. **Token:** paste the token (without the word "Bearer").
+
+Postman will send: `Authorization: Bearer eyJhbGciOiJIUzI1NiIs...`
+
+**Manual way (Headers tab):**
+
+- **Key:** `Authorization`
+- **Value:** `Bearer eyJhbGciOiJIUzI1NiIs...` (include the word "Bearer" and a space)
+
+**Typical workflow:**
+
+1. POST to `/api/login` with JSON body `{ "email", "password" }` and `Content-Type: application/json`.
+2. Copy the `token` from the response (e.g. `res.json({ token: "..." })`).
+3. In other requests (GET /api/me, GET /api/courses, etc.), set Authorization to **Bearer Token** and paste that token.
+
+**Server side:** Middleware reads `req.headers.authorization`, checks for `Bearer <token>`, and validates the token (e.g. JWT verify).
+
+---
+
+#### Basic Authentication (username:password)
+
+**Use when:** API uses HTTP Basic Auth (username and password sent as base64).
+
+**You must set:**
+
+- **Header:** `Authorization: Basic <base64(username:password)>`
+
+**Postman steps:**
+
+1. **Authorization** tab.
+2. **Type:** **Basic Auth**.
+3. **Username** and **Password:** enter credentials.
+
+Postman encodes them and sends `Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ=`.
+
+---
+
+#### API Key (custom header)
+
+**Use when:** API expects a key in a header like `X-API-Key` or `Api-Key`.
+
+**You must set:**
+
+- **Header:** e.g. `X-API-Key: your-api-key-here`
+
+**Postman steps:**
+
+1. **Headers** tab.
+2. Add:
+   - **Key:** `X-API-Key` (or whatever the API docs say).
+   - **Value:** your API key.
+
+**Server side:** Middleware reads `req.headers['x-api-key']` and validates it.
+
+---
+
+### 17.4. Request Body Types in Postman (raw, form-data, urlencoded)
+
+| Body type in Postman | Content-Type sent        | When to use                         | Server expects                          |
+|----------------------|--------------------------|-------------------------------------|-----------------------------------------|
+| **none**             | (no body)                | GET requests (usually no body)      | No body parsing                         |
+| **raw** + JSON       | application/json         | JSON APIs (create/update resources) | `express.json()` → `req.body`           |
+| **raw** + Text/XML   | text/plain or application/xml | Special APIs                   | Custom parser or none                    |
+| **form-data**        | multipart/form-data      | File uploads + fields               | Multer → `req.file`, `req.body`         |
+| **x-www-form-urlencoded** | application/x-www-form-urlencoded | Form submit (no files)     | `express.urlencoded()` → `req.body`     |
+
+**Important:** For JSON APIs, always use **raw** + **JSON** and set **Content-Type: application/json** (or rely on Postman setting it when you pick JSON). Using "raw" with "Text" and pasting JSON often does **not** set the header, so the server may not parse the body.
+
+---
+
+### 17.5. Query Parameters vs Request Body
+
+| Data type      | Where to put it in Postman | Used for                          | Server reads it as                |
+|----------------|----------------------------|-----------------------------------|-----------------------------------|
+| **Query params** | **Params** tab (or URL)   | GET filters, pagination, search   | `req.query` (e.g. `req.query.page`) |
+| **Request body** | **Body** tab              | POST/PUT/PATCH payload            | `req.body` (after parsing)        |
+
+**Examples:**
+
+- **GET** `/api/courses?page=1&limit=10` → **Params** in Postman: `page = 1`, `limit = 10`. Server: `req.query.page`, `req.query.limit`.
+- **POST** `/api/courses` with course object → **Body** → raw JSON. Server: `req.body.name`, `req.body.author`, etc.
+- **PUT** `/api/courses/1` with partial update → **Body** → raw JSON. Server: `req.body`.
+
+Do **not** put JSON in the URL. Use the **Body** tab for POST/PUT/PATCH payloads.
+
+---
+
+### 17.6. Common Headers Quick Reference
+
+| Header             | Example value                  | When to set                        |
+|--------------------|--------------------------------|------------------------------------|
+| **Content-Type**   | application/json               | Sending JSON in body               |
+| **Content-Type**   | application/x-www-form-urlencoded | Sending form (no files)          |
+| **Content-Type**   | (set by Postman)               | form-data (file upload)            |
+| **Authorization** | Bearer &lt;token&gt;           | Protected routes (JWT/session)     |
+| **Authorization** | Basic &lt;base64&gt;           | Basic Auth                         |
+| **Accept**         | application/json               | Ask server to return JSON          |
+| **X-API-Key**      | your-api-key                   | When API uses API key auth         |
+
+---
+
+### 17.7. Environment Variables and Workflow
+
+**Why use Postman environments:**  
+You can store base URL and token once and reuse them (e.g. switch between local and production, or refresh token after login).
+
+**Suggested variables:**
+
+- `base_url` — e.g. `http://localhost:3000` or `https://api.example.com`
+- `token` — JWT or session token after login
+
+**Usage in request:**
+
+- URL: `{{base_url}}/api/courses`
+- Authorization (Bearer Token): use `{{token}}` as the token value
+
+**Typical workflow:**
+
+1. Create environment with `base_url` and `token` (token can be empty at start).
+2. POST to `{{base_url}}/api/login` with credentials.
+3. Copy token from response → save to environment variable `token`.
+4. For all other requests, use **Authorization → Bearer Token** with `{{token}}`. No need to paste token again until it expires.
+
+---
+
+### 17.8. Scenario Checklist and Examples
+
+Use this as a quick checklist for each type of request.
+
+#### Scenario: POST – Create resource (JSON body)
+
+- Method: **POST**
+- URL: `http://localhost:3000/api/courses`
+- **Headers:** `Content-Type: application/json`
+- **Body:** raw → JSON  
+  Example: `{ "name": "React", "author": "Alex", "price": 149, "isPublished": true, "units": [...], "exam": [...] }`
+
+---
+
+#### Scenario: GET – List with query params
+
+- Method: **GET**
+- URL: `http://localhost:3000/api/courses`
+- **Params:** e.g. `page=1`, `limit=10`, `search=node`
+- **Body:** none
+
+---
+
+#### Scenario: GET – Protected route (Bearer token)
+
+- Method: **GET**
+- URL: `http://localhost:3000/api/me`
+- **Authorization:** Bearer Token → paste token (or `{{token}}`)
+- **Body:** none
+
+---
+
+#### Scenario: POST – Login (get token)
+
+- Method: **POST**
+- URL: `http://localhost:3000/api/login`
+- **Headers:** `Content-Type: application/json`
+- **Body:** raw → JSON  
+  Example: `{ "email": "user@example.com", "password": "secret" }`
+- Copy `token` from response and use it in subsequent requests as Bearer token.
+
+---
+
+#### Scenario: POST – File upload (multipart)
+
+- Method: **POST**
+- URL: `http://localhost:3000/api/upload`
+- **Body:** form-data  
+  - Key: `file` (type: File) → choose file  
+  - Key: `title` (type: Text) → value
+- Do **not** set Content-Type manually; Postman sets multipart boundary.
+
+---
+
+#### Scenario: PUT – Update resource (full replace, JSON body)
+
+- Method: **PUT**
+- URL: `http://localhost:3000/api/courses/1`
+- **Headers:** `Content-Type: application/json`
+- **Body:** raw → JSON (full resource)  
+  Example: `{ "name": "Updated Name", "author": "Alex", "price": 199, "isPublished": true, "units": [...], "exam": [...] }`
+- **Authorization:** Bearer Token if route is protected.
+
+---
+
+#### Scenario: PATCH – Partial update (JSON body)
+
+- Method: **PATCH**
+- URL: `http://localhost:3000/api/courses/1`
+- **Headers:** `Content-Type: application/json`
+- **Body:** raw → JSON (only changed fields)  
+  Example: `{ "price": 199 }` or `{ "name": "New Name", "isPublished": false }`
+- **Authorization:** Bearer Token if route is protected.
+
+---
+
+#### Scenario: DELETE – Remove resource
+
+- Method: **DELETE**
+- URL: `http://localhost:3000/api/courses/1`
+- **Body:** none (usually). Some APIs accept body for bulk delete: raw → JSON e.g. `{ "ids": [1, 2, 3] }`.
+- **Authorization:** Bearer Token if route is protected.
+
+---
+
+**Quick reminder:**  
+- JSON body → **Content-Type: application/json** and **Body → raw → JSON**.  
+- Protected routes → **Authorization: Bearer &lt;token&gt;** (or Basic/API Key as required).  
+- File upload → **Body → form-data** and let Postman set Content-Type.
+
+---
+
+### 17.9. HTTP Status Codes and Reading the Response
+
+**Where to see status in Postman:**  
+After sending a request, the **status code** appears next to the response (e.g. `200 OK`, `400 Bad Request`, `401 Unauthorized`). The **response body** shows what the server returned (JSON, HTML, or plain text).
+
+**Common status codes and what they mean:**
+
+| Code | Meaning | When you see it |
+|------|---------|------------------|
+| **200 OK** | Success. Request succeeded. | GET returned data; PUT/PATCH updated; sometimes DELETE. |
+| **201 Created** | Success. Resource was created. | POST create (e.g. new course, new user). |
+| **204 No Content** | Success. No body in response. | Often DELETE (resource removed, nothing to return). |
+| **400 Bad Request** | Client error. Request was invalid. | Missing/invalid body, validation failed (e.g. "Name is required"), wrong Content-Type. |
+| **401 Unauthorized** | Client error. Not authenticated. | No token, wrong token, or token expired. |
+| **403 Forbidden** | Client error. Authenticated but not allowed. | Valid token but no permission for this resource. |
+| **404 Not Found** | Client error. Resource or route not found. | Wrong URL, or ID doesn't exist (e.g. GET /api/courses/999). |
+| **409 Conflict** | Client error. Conflict with current state. | Duplicate email, version conflict. |
+| **429 Too Many Requests** | Client error. Rate limit exceeded. | Too many requests in a short time; wait or use Retry-After. |
+| **500 Internal Server Error** | Server error. Something broke on the server. | Unhandled exception, DB error; check server logs. |
+
+**Reading the response body:**
+
+- **JSON:** Response tab shows formatted JSON. Use **Pretty** view. Your backend often returns `{ "message": "Error text" }` or `{ "error": "Name is required" }` on 400/401/500.
+- **HTML:** Sometimes 404/500 return an HTML error page. If you expect JSON, set **Accept: application/json** (see 17.11) so the server may return JSON instead.
+- **Empty body:** 204 and some 201 responses have no body; that's normal.
+
+**Rate limiting (429):**
+
+- Server may send header **Retry-After** (seconds to wait). In Postman you can add a delay or retry later.
+- Fix: reduce request frequency, or use rate limit only in production so local testing doesn't hit it.
+
+---
+
+### 17.10. Path Parameters (URL Params) vs Query Parameters
+
+**Path parameters** are part of the URL path (e.g. `/api/courses/:id`). The server reads them as **`req.params`** (e.g. `req.params.id`).
+
+**Query parameters** are after `?` (e.g. `?page=1&limit=10`). The server reads them as **`req.query`** (e.g. `req.query.page`).
+
+**In Postman:**
+
+| Type | Where to set | Example URL | Server gets |
+|------|--------------|-------------|-------------|
+| **Path params** | **Params** tab → **Path Variables** (or type in URL) | `{{base_url}}/api/courses/1` | `req.params.id` = `"1"` |
+| **Query params** | **Params** tab → **Query Params** | `?page=1&limit=10` | `req.query.page`, `req.query.limit` |
+
+**Path variables in Postman:**
+
+1. URL: `http://localhost:3000/api/courses/:id`
+2. In **Params** tab, under **Path Variables**, add: **Variable** `id`, **Value** `1`.
+3. Postman will replace `:id` with `1` in the request.
+
+**When to use which:**
+
+- **Path:** Resource identity (e.g. get/update/delete course **by ID**). Example: GET `/api/courses/1`, PUT `/api/courses/1`.
+- **Query:** Filtering, pagination, search (optional). Example: GET `/api/courses?page=1&limit=10&search=node`.
+
+---
+
+### 17.11. Accept Header and Response Format
+
+**What it does:**  
+The **Accept** header tells the server what format you want in the **response** (e.g. JSON vs HTML).
+
+**Why set it:**  
+Some servers return HTML for errors (404/500) by default. If you set **Accept: application/json**, the server may return JSON (e.g. `{ "message": "Not found" }`) instead, which is easier to read in Postman and in frontend code.
+
+**When to set:**
+
+- **Accept: application/json** — For REST APIs when you always want JSON responses.
+
+**Postman steps:**
+
+1. **Headers** tab.
+2. Add: **Key** `Accept`, **Value** `application/json`.
+
+**Server side:**  
+Your Express API can check `req.headers.accept` and send `res.json(...)` for API routes. Many backends always respond with JSON for `/api/*` routes regardless of Accept, but setting Accept is good practice for consistency and for APIs that support multiple formats.
+
+---
+
+### 17.12. Cookie-Based Authentication
+
+**Use when:** The API uses **cookies** for session/auth instead of (or in addition to) Bearer tokens. After login, the server sends **Set-Cookie**; the client sends **Cookie** on later requests.
+
+**How it works:**
+
+1. **Login:** POST to `/api/login` with credentials. Response includes header **Set-Cookie** (e.g. `sessionId=abc123; HttpOnly; Path=/`).
+2. **Later requests:** Browser or Postman sends header **Cookie** with that value (e.g. `Cookie: sessionId=abc123`).
+3. Server reads `req.cookies` (with `cookie-parser`) or `req.headers.cookie` and validates the session.
+
+**In Postman:**
+
+- Postman can **automatically store and send cookies** if you enable it.
+- **Settings** → **General** → **Cookies** → **Manage Cookies** (or allow "Send cookies").
+- After a request that returns **Set-Cookie**, Postman stores it and sends it on subsequent requests to the same domain.
+- You can also set **Cookie** manually in **Headers**: **Key** `Cookie`, **Value** `sessionId=abc123`.
+
+**Server side:**  
+Use `cookie-parser` so that `req.cookies.sessionId` is available. For cookie + JWT, you might set an httpOnly cookie with the token and not use the Authorization header.
+
+---
+
+### 17.13. Pre-request Scripts and Tests Tab
+
+**Pre-request Scripts** run **before** the request is sent. Use them to set variables (e.g. timestamp), or to **get a token** by calling login and saving it to the environment.
+
+**Example: Auto-get token before a request**
+
+Use on a **Collection** or on a **single request** that needs auth. This example runs a login request and saves the token:
+
+```javascript
+// Pre-request Script (run before request)
+// Option A: Only get token if not set or expired (simplified: always get for demo)
+const loginUrl = pm.environment.get("base_url") + "/api/login";
+pm.sendRequest({
+    url: loginUrl,
+    method: "POST",
+    header: { "Content-Type": "application/json" },
+    body: {
+        mode: "raw",
+        raw: JSON.stringify({
+            email: pm.environment.get("user_email"),
+            password: pm.environment.get("user_password")
+        })
+    }
+}, (err, res) => {
+    if (!err && res.code === 200) {
+        const json = res.json();
+        if (json.token) {
+            pm.environment.set("token", json.token);
+        }
+    }
+});
+```
+
+**Environment variables needed:** `base_url`, `user_email`, `user_password`. After this runs, `{{token}}` is set for Bearer Token auth.
+
+**Tests tab** runs **after** the response. Use it to assert status code and body so you can run the collection as a regression test.
+
+**Example: Assert status and body**
+
+```javascript
+// Tests tab (run after response)
+pm.test("Status is 200", () => pm.response.to.have.status(200));
+pm.test("Response has body", () => {
+    const json = pm.response.json();
+    pm.expect(json).to.have.property("name");
+});
+```
+
+**Useful assertions:**
+
+- `pm.response.to.have.status(200);` — status code
+- `pm.response.json()` — parsed JSON body
+- `pm.expect(json.message).to.eql("Success");` — exact value
+- `pm.expect(json.items).to.be.an("array");` — type
+
+---
+
+### 17.14. SSL Certificate Verification (Local / Dev)
+
+**Use when:** You call **HTTPS** endpoints that use **self-signed** or invalid certificates (e.g. local server with HTTPS). Postman may show SSL errors and block the request.
+
+**Fix (only for local/dev):**
+
+1. **Settings** (gear icon) → **General**.
+2. Turn **OFF** **"SSL certificate verification"**.
+
+**Warning:** Do **not** disable this in production. Use it only for local or dev environments with self-signed certs.
+
+---
+
+### 17.15. PATCH vs PUT vs DELETE
+
+**PUT** — Full replace. Client sends the **entire** resource; server replaces it.  
+- Example: PUT `/api/courses/1` with full course object.  
+- Body: full JSON.  
+- Often returns **200 OK** with updated resource, or **204 No Content**.
+
+**PATCH** — Partial update. Client sends **only changed fields**; server merges.  
+- Example: PATCH `/api/courses/1` with `{ "price": 199 }`.  
+- Body: partial JSON.  
+- Returns **200 OK** with updated resource.
+
+**DELETE** — Remove resource.  
+- Example: DELETE `/api/courses/1`.  
+- **Body:** usually **none**. Some APIs accept a body for bulk delete (e.g. `{ "ids": [1, 2, 3] }`); check API docs.  
+- Returns **200 OK** with message, or **204 No Content** (no body).
+
+**In Postman:**
+
+- **PUT / PATCH:** Set **Content-Type: application/json**, **Body** → raw → JSON. For PATCH, send only the fields you want to update.
+- **DELETE:** Usually leave Body as **none**. If API expects a body, use raw JSON.
+
+---
+
+### 17.16. Multiple Files Upload and Form-Data Details
+
+**Multiple files in one request:**
+
+- **Same field name:** Some backends expect multiple files under one name (e.g. `files`). In Postman **form-data**, add multiple rows with the **same key** `files` and type **File**, each with a different file. Server gets an array (e.g. `req.files` with multer).
+- **Different field names:** Use different keys (e.g. `avatar`, `document`). Server gets `req.files.avatar`, `req.files.document` or similar depending on multer config.
+
+**Form-data best practices:**
+
+- **File field name** must match what the server expects (e.g. `file` or `image`). Check your multer `upload.single('file')` or `upload.array('files')`.
+- **Other fields** (e.g. `title`, `userId`) go as **Text** in form-data; server reads them from `req.body` after multer.
+- **Do not** set Content-Type manually for form-data; Postman adds `multipart/form-data` and the correct **boundary**.
+
+**Large files:**  
+If the server has a body size limit (e.g. `express.json({ limit: '10mb' })` or multer limits), requests may fail with 413 or timeout. Increase limit on server or reduce file size for testing.
+
+---
+
+### 17.17. Collection vs Environment Variables
+
+| Scope | Where to set | When to use |
+|-------|--------------|-------------|
+| **Environment** | **Environments** → select env → **Edit** → Variables | Values that **change per environment**: `base_url` (local vs prod), `token`, `user_email`, `user_password`. Switch env to switch base URL and credentials. |
+| **Collection** | **Collection** → **Variables** tab | Values **same for whole collection**: e.g. shared `api_version`, or default `base_url` if you only have one env. |
+
+**Precedence:** Request-level variables override collection, which override environment. Use **`{{variable}}`** in URL, headers, or body.
+
+**Tip:** Create environments like "Local", "Staging", "Production" with different `base_url` and (if needed) different credentials. Select the environment from the top-right dropdown before sending requests.
+
+---
+
+### 17.18. Troubleshooting: Common Mistakes and Fixes
+
+| Problem | Likely cause | Fix |
+|---------|----------------|-----|
+| **"Name is required" or empty `req.body`** | No **Content-Type: application/json** or Body not **raw** + **JSON** | Set Header **Content-Type: application/json** and Body → **raw** → **JSON**. |
+| **401 Unauthorized on protected route** | Token not sent or wrong | Set **Authorization** → **Bearer Token** and paste token (or use `{{token}}`). Ensure no extra space; value is token only, Postman adds "Bearer". |
+| **404 on correct path** | Wrong method or typo in URL | Check method (GET/POST/PUT/DELETE) and URL (trailing slash can matter). Check **Params** so path/query are correct. |
+| **Response is HTML instead of JSON** | Server returns HTML error page | Set **Accept: application/json**. Ensure your API route sends `res.json()` for errors. |
+| **File upload: "Unexpected end of form" or empty `req.file`** | Wrong field name or body type | Use **form-data**; file key must match server (e.g. `upload.single('file')` → key `file`). Don't use raw JSON for file upload. |
+| **CORS error in browser but Postman works** | CORS is browser-only | Postman doesn't enforce CORS. For browser, backend must set CORS headers (e.g. `cors()` middleware). |
+| **SSL certificate error** | Self-signed or invalid cert (local/dev) | Settings → General → turn **OFF** "SSL certificate verification" (dev only). |
+| **429 Too Many Requests** | Rate limit hit | Wait; check **Retry-After** header. For local testing, relax or disable rate limit. |
+| **413 Payload Too Large** | Request body exceeds server limit | Increase limit on server (e.g. `express.json({ limit: '10mb' })`) or send smaller body. |
+| **404 but URL looks correct** | Trailing slash or typo | `/api/courses` vs `/api/courses/` are different in Express. Match server URL exactly. |
+
+**Checklist before sending:**
+
+1. **Method** and **URL** correct?  
+2. **Headers:** Content-Type (if body), Authorization (if protected), Accept (if you want JSON).  
+3. **Body:** raw + JSON for JSON APIs; form-data for file upload.  
+4. **Params:** Path variables and query params set if needed.  
+5. **Environment** selected if you use `{{base_url}}` or `{{token}}`.
+
+---
+
+### 17.19. Response Time and Response Headers
+
+**Response time:**  
+After sending a request, Postman shows **response time** (e.g. `234 ms`) at the bottom of the response panel or in the status line. Use it to spot slow endpoints or compare before/after changes.
+
+**Response headers:**  
+In the **Response** tab, open **Headers** to see what the server sent. Useful for:
+
+| Header | What it tells you |
+|--------|--------------------|
+| **Content-Type** | Response format (e.g. `application/json`). |
+| **Set-Cookie** | Cookie-based auth; server is setting a cookie. |
+| **Retry-After** | After 429; seconds to wait before retrying. |
+| **Link** | Pagination (e.g. `rel="next"`, `rel="prev"`). |
+| **X-Total-Count** | Total items (for paginated lists). |
+| **Access-Control-*** | CORS headers (e.g. `Access-Control-Allow-Origin`). |
+
+**Server side:**  
+Your backend sets these with `res.setHeader()` or `res.set()`. Checking them in Postman helps verify CORS, cookies, and pagination.
+
+---
+
+### 17.20. Saving Token from Response (Tests Tab After Login)
+
+**Use when:** You have a **Login** request and want to **save the token** from the response so other requests can use `{{token}}` without copy-paste.
+
+**Steps:**
+
+1. Open the **Login** request (e.g. POST `/api/login`).
+2. Go to **Tests** tab.
+3. Add a script that runs **after** the response and saves the token to the environment:
+
+```javascript
+// Tests tab on Login request (runs after response)
+if (pm.response.code === 200) {
+    const json = pm.response.json();
+    if (json.token) {
+        pm.environment.set("token", json.token);
+        console.log("Token saved to environment.");
+    }
+}
+```
+
+4. Send the Login request once. The token is saved to `token` in the **current environment**.
+5. In other requests, set **Authorization** → **Bearer Token** and use **`{{token}}`** as the token value.
+
+**Tip:** Combine with Pre-request Script (17.13) if you want to auto-login before every request; or use this Tests script so you log in once and reuse the token until it expires.
+
+---
+
+### 17.21. URL and Method Details (Trailing Slash, GET Body, 413)
+
+**Trailing slash:**  
+Express treats `/api/courses` and `/api/courses/` as **different routes** unless you normalize them. In Postman, the URL must **exactly match** what your server defines. If you get 404, check for an extra or missing trailing slash.
+
+**GET request and body:**  
+**GET** requests **should not** have a body for practical use. Many servers, proxies, and caches ignore or reject a GET body. Use **query parameters** (Params tab) for filters and pagination. In Postman, leave **Body** as **none** for GET.
+
+**413 Payload Too Large:**  
+If the server rejects the request with **413**, the **request body is too large**. The server has a limit (e.g. `express.json({ limit: '10kb' })` or multer `limits`). Fix: increase the limit on the server (e.g. `express.json({ limit: '10mb' })`) or send a smaller body for testing.
+
+**Content-Type charset (optional):**  
+For non-ASCII characters (e.g. Unicode) in JSON, you can set **Content-Type: application/json; charset=utf-8**. Postman usually sends UTF-8 by default when you pick JSON. Only set charset explicitly if the server expects it or you see encoding issues.
+
+---
+
+### 17.22. PATCH and DELETE Scenarios (Summary)
+
+**PATCH** — Partial update. Send **only the fields you want to change** in the body.  
+- Method: **PATCH**  
+- URL: `{{base_url}}/api/courses/1` (or use path variable)  
+- Headers: **Content-Type: application/json**, **Authorization: Bearer {{token}}** if protected  
+- Body: raw → JSON, e.g. `{ "price": 199 }`  
+
+**DELETE** — Remove resource. Usually **no body**.  
+- Method: **DELETE**  
+- URL: `{{base_url}}/api/courses/1`  
+- Body: **none** (or raw JSON only if API supports bulk delete body)  
+- Authorization: Bearer Token if protected  
+
+---
+
+### 17.23. Collection Runner and Quick Tips
+
+**Collection Runner:**  
+Use **Run** on a **Collection** to execute all requests in sequence. Useful for:
+
+- **Regression testing:** Run after code changes to ensure endpoints still work.
+- **Order:** Put Login first so its Tests script saves the token; later requests use `{{token}}`.
+- **Iterations:** Run multiple times (e.g. with a data file) for load or data-driven tests.
+
+**Quick tips:**
+
+- **Duplicate request:** Right-click a request → Duplicate to create a variant (e.g. same URL, different body).
+- **Request-level variables:** In scripts you can use `pm.variables.set("name", value)` and `pm.variables.get("name")` for values that exist only for that request (e.g. timestamp). They don’t persist across requests unless you also set them in env/collection.
+- **Bulk create:** POST with **Body** → raw → JSON array, e.g. `[{ "name": "A" }, { "name": "B" }]`. Content-Type remains **application/json**. Server must expect an array and create multiple resources (if your API supports it).
+- **Idempotency:** **PUT** is idempotent (same request twice = same result). **POST** is not (each call can create a new resource). Use PUT for full replace, PATCH for partial update, POST for create.
+
+---
+
+## 18. Morgan
+
+**Package:** `morgan`  
+**Type:** External NPM Package  
+**Purpose:** HTTP request logger middleware for Express. Logs each incoming request (method, URL, status, response time, etc.) to the console or to a stream (e.g. file).
+
+---
+
+### 18.1. What Morgan Does (HTTP Request Logger)
+
+Morgan is **middleware** that runs on every request and writes a log line describing that request. It does **not** parse the body or modify the request; it only logs and calls `next()`.
+
+**What gets logged (depends on format):**
+
+- HTTP method (GET, POST, etc.)
+- URL path
+- Status code of the response
+- Response time
+- Content length
+- User-Agent (optional)
+- Date (optional)
+
+**Why use it:**  
+In development, you see each request in the terminal (e.g. `GET /api/courses 200 12.345 ms`). In production, you can stream logs to a file or log service for debugging and monitoring.
+
+---
+
+### 18.2. Installation and Basic Usage
+
+**Installation:**
+```bash
+npm install morgan
+```
+
+**Basic usage (use before routes):**
+```javascript
+const express = require("express");
+const morgan = require("morgan");
+
+const app = express();
+
+// Log all requests with "dev" format (colored, concise)
+app.use(morgan("dev"));
+
+app.get("/", (req, res) => {
+  res.send("Hello, world!");
+});
+
+app.listen(3000);
+```
+
+**Output example (dev format):**
+```
+GET / 200 2.123 ms - 13
+GET /api/courses 200 1.456 ms - 234
+POST /api/courses 201 3.789 ms - 512
+```
+
+---
+
+### 18.3. Predefined Formats (dev, combined, common, short, tiny)
+
+Morgan provides several **predefined format strings**. You pass the format name as the first argument: `app.use(morgan("formatName"))`.
+
+| Format    | Typical use   | What it logs |
+|-----------|---------------|---------------|
+| **dev**   | Development   | Colored output: `:method :url :status :response-time ms - :res[content-length]`. Concise, one line per request. |
+| **combined** | Production (Apache-style) | Standard Apache combined log: `:remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"`. |
+| **common** | Production     | Apache common log format (no referrer/user-agent in same style). |
+| **short** | Dev / staging  | Shorter than default: `:remote-addr :method :url :status :response-time - :res[content-length]`. |
+| **tiny**  | Minimal        | Minimal: `:method :url :status :res[content-length] - :response-time ms`. |
+
+**Examples:**
+```javascript
+// Development: colored, easy to read
+app.use(morgan("dev"));
+
+// Production: full Apache-style log (e.g. for nginx/load balancer parsing)
+app.use(morgan("combined"));
+
+// Minimal output
+app.use(morgan("tiny"));
+```
+
+**Recommendation:** Use **`dev`** in development and **`combined`** (or **`common`**) in production if you write logs to a file or log aggregator.
+
+---
+
+### 18.4. Custom Format and Options
+
+**Custom format string:**  
+You can define your own format using **tokens** (e.g. `:method`, `:url`, `:status`, `:response-time`, `:res[content-length]`, `:date[clf]`).
+
+```javascript
+// Custom format
+morgan(":method :url :status :response-time ms");
+```
+
+**Log to a file (stream):**  
+By default Morgan writes to `process.stdout`. To write to a file, pass a **write stream** as the second argument:
+
+```javascript
+const fs = require("fs");
+const path = require("path");
+
+// Create a write stream for access log (append mode)
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, "access.log"),
+  { flags: "a" }
+);
+
+// Log to file in "combined" format
+app.use(morgan("combined", { stream: accessLogStream }));
+
+// Optional: also log to console in dev
+if (process.env.NODE_ENV !== "production") {
+  app.use(morgan("dev"));
+}
+```
+
+**Skip logging for certain requests:**  
+Use the **skip** option so health checks or static assets don’t clutter logs:
+
+```javascript
+app.use(
+  morgan("dev", {
+    skip: (req, res) => res.statusCode < 400, // Only log errors
+  })
+);
+
+// Or skip static files
+app.use(
+  morgan("dev", {
+    skip: (req) => req.url.startsWith("/static"),
+  })
+);
+```
+
+---
+
+### 18.5. When to Use Morgan (Dev vs Production)
+
+| Environment   | Suggestion |
+|---------------|------------|
+| **Development** | Use `morgan("dev")` so every request is visible in the terminal. Helps debug routes and see status/response time. |
+| **Production**  | Use `morgan("combined")` or `morgan("common")` and send output to a **stream** (file or log service). Avoid logging sensitive data (e.g. full body); Morgan logs method, URL, status, etc., not the body by default. |
+| **Conditional** | Only enable Morgan in development, or use different formats per environment. |
+
+**Conditional usage example:**
+```javascript
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+} else {
+  app.use(morgan("combined")); // or stream to file
+}
+```
+
+---
+
+### 18.6. Quick Reference
+
+| Task              | Code |
+|-------------------|------|
+| Log all requests (dev) | `app.use(morgan("dev"));` |
+| Production log format  | `app.use(morgan("combined"));` |
+| Log to file            | `app.use(morgan("combined", { stream: accessLogStream }));` |
+| Skip by status        | `app.use(morgan("dev", { skip: (req, res) => res.statusCode < 400 }));` |
+| Custom format         | `app.use(morgan(":method :url :status :response-time ms"));` |
+
+**Placement:** Use Morgan **early** in your middleware stack (e.g. after `express.json()` if you want, but before routes) so every request is logged.
+
+---
+
+## 19. Config (node-config)
+
+**Package:** `config`  
+**Type:** External NPM Package  
+**Purpose:** Load application configuration from files in a `config/` folder, with different files per environment (development, production, etc.). Merges `default` + environment-specific + `local` so you can override per machine without changing code.
+
+---
+
+### 19.1. What Config Does (Configuration by Environment)
+
+The **config** package (often called node-config) reads configuration from a **config/** directory. It loads **default** values first, then **environment-specific** values (based on `NODE_ENV`), then **local** overrides. You use `config.get('key')` in code instead of hardcoding or reading JSON yourself.
+
+**What it gives you:**
+
+- One place for app settings (port, DB name, feature flags, etc.).
+- Different values per environment (dev, staging, production) without changing code.
+- Optional **local** file (e.g. `local.json`) for machine-specific overrides, usually not committed.
+
+**Why use it:**  
+Keeps configuration out of code and makes it easy to switch environments by setting `NODE_ENV`. Complements **dotenv** (which is better for secrets like API keys and DB passwords).
+
+---
+
+### 19.2. Installation and Folder Structure
+
+**Installation:**
+```bash
+npm install config
+```
+
+**Folder structure (by default config reads from `./config`):**
+```
+project/
+├── config/
+│   ├── default.json      # Base config (all environments)
+│   ├── development.json  # Overrides when NODE_ENV=development
+│   ├── production.json   # Overrides when NODE_ENV=production
+│   ├── staging.json      # Overrides when NODE_ENV=staging (optional)
+│   └── local.json       # Local overrides (optional, often in .gitignore)
+├── app.js
+└── package.json
+```
+
+**Example `config/default.json`:**
+```json
+{
+  "name": "My App",
+  "port": 3000,
+  "db": {
+    "host": "localhost",
+    "port": 3306,
+    "name": "myapp"
+  },
+  "featureFlags": {
+    "newDashboard": false
+  }
+}
+```
+
+**Example `config/development.json`:**
+```json
+{
+  "port": 3001,
+  "db": {
+    "name": "myapp_dev"
+  },
+  "featureFlags": {
+    "newDashboard": true
+  }
+}
+```
+
+**Example `config/production.json`:**
+```json
+{
+  "port": 8080,
+  "db": {
+    "host": "db.production.example.com"
+  }
+}
+```
+
+**Example `config/local.json` (optional, for your machine only):**
+```json
+{
+  "port": 4000,
+  "db": {
+    "password": "from-dotenv-or-secret-manager"
+  }
+}
+```
+
+---
+
+### 19.3. File Loading Order and NODE_ENV
+
+**Loading order (later files override earlier):**
+
+1. **default.json** (or default.js, default.yml) — base config.
+2. **{NODE_ENV}.json** — e.g. `development.json`, `production.json`. Loaded only if `NODE_ENV` is set.
+3. **local.json** — local overrides. Often in `.gitignore`.
+
+So for `NODE_ENV=development`, config = default + development + local (deep merge).
+
+**Setting NODE_ENV:**
+
+- Shell: `export NODE_ENV=production`
+- One-off: `NODE_ENV=production node app.js`
+- In code (before requiring config): `process.env.NODE_ENV = 'production'; const config = require('config');`
+
+**Config directory:**  
+By default config looks for the **config/** folder in the current working directory. Override with environment variable **NODE_CONFIG_DIR** (absolute path).
+
+---
+
+### 19.4. Using config.get() and Nested Keys
+
+**Basic usage:**
+```javascript
+const config = require('config');
+
+// Top-level key
+const appName = config.get('name');           // "My App"
+const port = config.get('port');              // 3001 in dev, 8080 in prod
+
+// Nested key (dot notation)
+const dbHost = config.get('db.host');         // "localhost" or overridden
+const dbName = config.get('db.name');        // "myapp_dev" in development
+
+// Check if key exists
+if (config.has('featureFlags.newDashboard')) {
+  const enabled = config.get('featureFlags.newDashboard');
+}
+
+// Get entire section
+const dbConfig = config.get('db');            // { host, port, name, ... }
+```
+
+**If a required key is missing**, `config.get('missing')` throws. Use **config.has('key')** to avoid throwing, or **config.get('key', defaultValue)** if your version supports it (or wrap in try/catch).
+
+**Common pattern:**  
+Use config for non-secret settings (port, hostnames, feature flags). Use **dotenv** for secrets (passwords, API keys) and reference them via `process.env`; you can also put `process.env` values in config files if the format supports it (e.g. in custom .js config).
+
+---
+
+### 19.5. Config vs Dotenv (When to Use Which)
+
+| Use case | Prefer | Reason |
+|----------|--------|--------|
+| Port, app name, feature flags, DB hostname | **config** | Structured, per-environment, one place. |
+| DB password, API keys, secrets | **dotenv** (or secret manager) | Keep out of config files in repo; use .env (in .gitignore) or env vars. |
+| Simple app, few vars | **dotenv** only | No need for config folder. |
+| Many settings, multiple environments | **config** + **dotenv** | config for structure and env overrides; dotenv for secrets loaded into `process.env`. |
+
+**Together:**  
+Call `require('dotenv').config()` first so `process.env` is set. Then `require('config')`. In config files you can reference env vars if you use **custom config files** (e.g. `config/default.js` that reads `process.env.DB_PASSWORD`). For JSON config files, keep secrets in .env and read them in code via `process.env`, not in config JSON.
+
+#### custom-environment-variables.json: Explanation and Example
+
+**What it is:**  
+`custom-environment-variables.json` is a **special config file** recognized by the **config** package. It does **not** store values. It only maps **config key paths** to **environment variable names**. When you call `config.get('some.key')`, config checks this file; if `some.key` is mapped to an env var name (e.g. `"API_KEY"`), it returns `process.env.API_KEY` instead of a value from default.json or development.json.
+
+**How the mapping works:**
+
+| In custom-environment-variables.json | Meaning |
+|---------------------------------------|--------|
+| **Key** (e.g. `"db"` → `"password"`) | The **config path** you use in code: `config.get('db.password')`. |
+| **Value** (e.g. `"DB_PASSWORD"`)     | The **name of the environment variable**. Config returns `process.env.DB_PASSWORD` when you call `config.get('db.password')`. |
+
+So the **value** in the JSON is always the **name of the env var** (a string). Dotenv (or the system) puts the actual secret in `process.env.DB_PASSWORD`; config only says “for the key `db.password`, use `process.env.DB_PASSWORD`”.
+
+**Loading order:**  
+Config loads and merges files in this order: `default.json` → `development.json` (or other NODE_ENV) → `custom-environment-variables.json` (and others). The custom-environment-variables mapping is applied when you call `config.get()`. You must run **dotenv** before the first `require('config')` so that `process.env` is already populated from `.env`.
+
+**If the env var is missing:**  
+If `process.env.DB_PASSWORD` is undefined (e.g. not in .env and not set in the shell), `config.get('db.password')` typically returns `undefined`. Your code should check for that if the value is required. Some setups or validators may throw if a required key is missing; see the config package docs.
+
+**Complete example:**
+
+**1. .env** (project root; in .gitignore):
+```env
+NODE_ENV=development
+DB_PASSWORD=secret123
+DB_USER=appuser
+API_KEY=sk_abc
+```
+
+**2. config/default.json** — only non-secret, non-env settings:
+```json
+{
+  "name": "My App",
+  "port": 3000,
+  "db": {
+    "host": "localhost",
+    "port": 3306,
+    "database": "myapp"
+  }
+}
+```
+Do **not** put `password` or `user` here if you use custom-environment-variables for them; the env mapping will supply those keys.
+
+**3. config/custom-environment-variables.json** — map config paths to env var **names**:
+```json
+{
+  "db": {
+    "password": "DB_PASSWORD",
+    "user": "DB_USER"
+  },
+  "api": {
+    "key": "API_KEY"
+  }
+}
+```
+
+- `config.get('db.password')` → config reads `process.env.DB_PASSWORD` → e.g. `"secret123"`.
+- `config.get('db.user')` → config reads `process.env.DB_USER` → e.g. `"appuser"`.
+- `config.get('api.key')` → config reads `process.env.API_KEY` → e.g. `"sk_abc"`.
+- `config.get('db.host')` → not in this file, so config uses **default.json** → `"localhost"`.
+
+**4. app.js** — load dotenv first, then config; use config for everything:
+```javascript
+// 1. Load .env into process.env BEFORE config is required
+require('dotenv').config();
+
+// 2. Config will use custom-environment-variables to read from process.env
+const config = require('config');
+
+const port = config.get('port');                    // from default.json: 3000
+const dbHost = config.get('db.host');               // from default.json: "localhost"
+const dbPassword = config.get('db.password');       // from process.env.DB_PASSWORD
+const dbUser = config.get('db.user');               // from process.env.DB_USER
+const apiKey = config.get('api.key');               // from process.env.API_KEY
+
+// One API for all settings (structure from JSON, secrets from env)
+const pool = require('mysql2/promise').createPool({
+  host: config.get('db.host'),
+  port: config.get('db.port'),
+  user: config.get('db.user'),
+  password: config.get('db.password'),
+  database: config.get('db.database'),
+});
+```
+
+**Summary:**  
+Put the **name** of each env var in `custom-environment-variables.json` (as the string value). Load dotenv first so `process.env` has the values. Then `config.get('key')` gives you either a value from default/development JSON or, for mapped keys, the value from the corresponding environment variable.
+
+---
+
+#### 19.5.1. Config with Dotenv: Complete Examples
+
+**Example 1: Dotenv first, then config; use config for settings, process.env for secrets**
+
+Load dotenv **before** requiring config so that `process.env` is available. Use **config** for non-secret settings and **process.env** for secrets in your application code.
+
+**.env** (in project root; add to .gitignore):
+```env
+NODE_ENV=development
+DB_PASSWORD=mySecretPassword123
+API_KEY=sk_live_abc123
+JWT_SECRET=yourJwtSecretKey
+```
+
+**config/default.json** (no secrets; safe to commit):
+```json
+{
+  "name": "My App",
+  "port": 3000,
+  "db": {
+    "host": "localhost",
+    "port": 3306,
+    "database": "myapp",
+    "user": "root"
+  },
+  "api": {
+    "timeout": 5000
+  }
+}
+```
+
+**config/development.json** (overrides for development):
+```json
+{
+  "port": 3001,
+  "db": {
+    "database": "myapp_dev"
+  }
+}
+```
+
+**app.js** (or server.js):
+```javascript
+// 1. Load dotenv FIRST so process.env is set before anything else
+require('dotenv').config();
+
+// 2. Then load config (can use NODE_ENV from .env now)
+const config = require('config');
+const express = require('express');
+
+const app = express();
+const PORT = config.get('port');
+
+// 3. Use config for non-secret settings
+const dbHost = config.get('db.host');
+const dbPort = config.get('db.port');
+const dbName = config.get('db.database');
+const dbUser = config.get('db.user');
+
+// 4. Use process.env for secrets (from .env)
+const dbPassword = process.env.DB_PASSWORD;
+const apiKey = process.env.API_KEY;
+const jwtSecret = process.env.JWT_SECRET;
+
+// Example: create DB connection using config + env
+async function getDbConnection() {
+  const mysql = require('mysql2/promise');
+  return mysql.createPool({
+    host: dbHost,
+    port: dbPort,
+    user: dbUser,
+    password: dbPassword,  // from dotenv, never in config JSON
+    database: dbName,
+  });
+}
+
+app.listen(PORT, () => {
+  console.log(`${config.get('name')} running on port ${PORT}`);
+});
+```
+
+---
+
+**Example 2: Config “custom-environment-variables” — map config keys to env vars**
+
+The **config** package can read certain keys from environment variables using a file named **custom-environment-variables.json**. You still load dotenv first; then `config.get('db.password')` will return `process.env.DB_PASSWORD`.
+
+**config/custom-environment-variables.json**:
+```json
+{
+  "db": {
+    "password": "DB_PASSWORD",
+    "user": "DB_USER"
+  },
+  "api": {
+    "key": "API_KEY"
+  },
+  "jwt": {
+    "secret": "JWT_SECRET"
+  }
+}
+```
+
+Each value is the **name of the environment variable** (dotenv loads these from .env into `process.env`). Config will call `process.env.DB_PASSWORD` when you `config.get('db.password')`.
+
+**.env** (unchanged):
+```env
+NODE_ENV=development
+DB_PASSWORD=mySecretPassword123
+DB_USER=root
+API_KEY=sk_live_abc123
+JWT_SECRET=yourJwtSecretKey
+```
+
+**config/default.json** (omit secrets; they come from env via custom-environment-variables):
+```json
+{
+  "name": "My App",
+  "port": 3000,
+  "db": {
+    "host": "localhost",
+    "port": 3306,
+    "database": "myapp"
+  }
+}
+```
+
+**app.js** — one place for all config:
+```javascript
+// 1. Dotenv first
+require('dotenv').config();
+
+// 2. Config (reads custom-environment-variables → process.env)
+const config = require('config');
+
+const port = config.get('port');
+const dbPassword = config.get('db.password');   // from process.env.DB_PASSWORD
+const dbUser = config.get('db.user');           // from process.env.DB_USER
+const apiKey = config.get('api.key');           // from process.env.API_KEY
+const jwtSecret = config.get('jwt.secret');     // from process.env.JWT_SECRET
+
+// All settings (including secrets) via config.get()
+const pool = require('mysql2/promise').createPool({
+  host: config.get('db.host'),
+  port: config.get('db.port'),
+  user: config.get('db.user'),
+  password: config.get('db.password'),
+  database: config.get('db.database'),
+});
+```
+
+---
+
+**Example 3: Config with dotenv using a .js config file**
+
+If you use **config/default.js** (instead of default.json), you can read `process.env` inside the file. Load dotenv **before** the first `require('config')` so `process.env` is already set.
+
+**config/default.js**:
+```javascript
+// Dotenv must already have been run (e.g. in app.js: require('dotenv').config() first)
+module.exports = {
+  name: 'My App',
+  port: process.env.PORT || 3000,
+  db: {
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT, 10) || 3306,
+    database: process.env.DB_NAME || 'myapp',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD,  // from .env; no default
+  },
+  jwt: {
+    secret: process.env.JWT_SECRET,
+  },
+};
+```
+
+**app.js**:
+```javascript
+require('dotenv').config();  // Must be first
+const config = require('config');
+
+const port = config.get('port');
+const dbConfig = config.get('db');  // includes password from process.env
+```
+
+**Summary of the three approaches:**
+
+| Approach | Use when |
+|---------|----------|
+| **Example 1** (config for structure, process.env for secrets in code) | You want a clear split: config = non-secret, secrets only in process.env. |
+| **Example 2** (custom-environment-variables.json) | You want a single API: everything via config.get(); secrets still live in .env. |
+| **Example 3** (default.js with process.env) | You want full control in JS (defaults, parsing, validation) and one config file that uses env. |
+
+---
+
+### 19.6. Quick Reference
+
+| Task | Code |
+|------|------|
+| Load config | `const config = require('config');` |
+| Get value | `config.get('port')` or `config.get('db.host')` |
+| Check key | `config.has('featureFlags.newDashboard')` |
+| Current env | `config.util.getEnv('NODE_ENV')` (after require) |
+| Override config dir | Set env **NODE_CONFIG_DIR** to absolute path |
+
+**File formats:**  
+Config supports **.json**, **.js**, **.yml**, **.yaml**, **.xml**, etc. Same base name with different extension (e.g. default.json vs default.js); see package docs for precedence.
+
+**Placement:**  
+Require config **once** at app startup (e.g. top of server.js or in a small config loader). Use `config.get()` wherever you need a setting (e.g. port, DB host). Keep **config/** at project root (or path given by NODE_CONFIG_DIR).
+
+---
+
+## 20. Debug
+
+**Package:** `debug`  
+**Type:** External NPM Package  
+**Purpose:** A small debugging utility that uses the **DEBUG** environment variable to turn logging on or off by **namespace**. You can enable only certain parts of your app (e.g. `myapp:db`, `myapp:api`) instead of leaving `console.log` everywhere or seeing everything at once.
+
+---
+
+### 20.1. What Debug Does (Namespace-Based Logging)
+
+**debug** gives you a logger function tied to a **namespace** (e.g. `myapp:db`). Logs are written only when that namespace is enabled via the **DEBUG** environment variable. By default (when DEBUG is not set), nothing is printed.
+
+**What you get:**
+
+- **Namespaces** — Group logs by module or area (e.g. `myapp:db`, `myapp:auth`).
+- **Toggle by env** — Enable/disable without code changes: `DEBUG=myapp:* node app.js`.
+- **No removal** — Leave `debug('...')` calls in code; they are no-ops when DEBUG is off.
+
+**Why use it:**  
+In development you can turn on only the namespaces you need (e.g. DB or auth). In production you typically don’t set DEBUG, so no debug output. Avoids scattering and removing `console.log` and gives a single switch (DEBUG) for all debug logging.
+
+---
+
+### 20.2. Installation and Basic Usage
+
+**Installation:**
+```bash
+npm install debug
+```
+
+**Basic usage:**
+```javascript
+const debug = require('debug')('myapp:server');
+
+debug('Server starting on port %d', 3000);
+// When DEBUG=myapp:server (or myapp:* or *) is set, prints something like:
+//   myapp:server Server starting on port 3000
+```
+
+**Creating a logger:**  
+Call `require('debug')('namespace')` once per file or module. The string is the **namespace** (e.g. `myapp`, `myapp:db`, `myapp:auth`). Use colons to group (e.g. `myapp:db:query`).
+
+**Example with multiple namespaces:**
+```javascript
+// server.js
+const debug = require('debug')('myapp:server');
+debug('Listening on port %s', 3000);
+
+// db.js
+const debug = require('debug')('myapp:db');
+debug('Connecting to database');
+debug('Query result: %o', { id: 1, name: 'test' });
+
+// auth.js
+const debug = require('debug')('myapp:auth');
+debug('Checking token');
+```
+
+**Run with:**  
+`DEBUG=myapp:* node server.js` — all `myapp:*` logs appear.  
+`DEBUG=myapp:db node server.js` — only `myapp:db` logs appear.
+
+---
+
+### 20.3. DEBUG Environment Variable and Namespaces
+
+**How DEBUG works:**  
+DEBUG is a list of **patterns** (namespaces or wildcards). If the pattern matches a logger’s namespace, that logger outputs; otherwise it does nothing.
+
+| DEBUG value | Effect |
+|-------------|--------|
+| (not set or empty) | No debug output. |
+| `*` | Enable all namespaces. |
+| `myapp:*` | Enable all namespaces that start with `myapp:` (e.g. `myapp:server`, `myapp:db`). |
+| `myapp:db` | Enable only `myapp:db`. |
+| `myapp:db,myapp:auth` | Enable `myapp:db` and `myapp:auth` (comma-separated). |
+| `*,-myapp:noise` | Enable all except namespaces matching `myapp:noise` (minus = exclude). |
+
+**Namespace naming:**  
+Use a prefix (e.g. app name) plus a colon and area: `appname:module` or `appname:module:sub`. Many packages use their own namespaces (e.g. `express:router`). Enabling `*` or `express:*` shows their debug output too.
+
+---
+
+### 20.4. Enabling and Disabling (Unix, CMD, PowerShell)
+
+**Linux / macOS (and Windows with Bash-style shells):**
+```bash
+DEBUG=myapp:* node app.js
+DEBUG=* node app.js
+DEBUG=myapp:db,myapp:auth node app.js
+```
+
+**Windows CMD:**
+```cmd
+set DEBUG=myapp:* && node app.js
+```
+
+**Windows PowerShell:**
+```powershell
+$env:DEBUG='myapp:*'; node app.js
+```
+
+**In .env (with dotenv):**  
+You can put `DEBUG=myapp:*` in `.env` and run `require('dotenv').config()` before any `require('debug')`. Then `node app.js` will use that value. Useful for local development; keep DEBUG unset in production.
+
+**Scope:**  
+Setting DEBUG like this applies only to that process. It does not change your shell’s environment after the process exits.
+
+---
+
+### 20.5. When to Use Debug vs console.log vs Morgan
+
+| Tool | Use when |
+|------|----------|
+| **debug** | Development; you want to toggle logs by namespace (db, auth, etc.) without editing code. Leave calls in place; they are off when DEBUG is unset. |
+| **console.log** | Quick one-off logs; always on unless you remove or guard them. No namespaces or env switch. |
+| **morgan** | HTTP request logging only (method, URL, status, time). Not for general app debugging. |
+
+**Typical combo:**  
+Use **morgan** for request logs and **debug** for application-level debugging (DB, auth, business logic). Use **console.log** sparingly or for errors (e.g. `console.error`).
+
+---
+
+### 20.6. Quick Reference
+
+| Task | Code |
+|------|------|
+| Create logger | `const debug = require('debug')('myapp:server');` |
+| Log message | `debug('message');` or `debug('format %s', value);` |
+| Log object | `debug('data: %o', obj);` |
+| Enable all | `DEBUG=* node app.js` |
+| Enable namespace | `DEBUG=myapp:* node app.js` |
+| Enable multiple | `DEBUG=myapp:db,myapp:auth node app.js` |
+| Exclude namespace | `DEBUG=*,-myapp:noise node app.js` |
+
+**Format specifiers:**  
+Like `console.log`: `%s` string, `%d` number, `%o` object, `%j` JSON. Use them for cleaner output and to avoid stringifying large objects by hand.
+
+**Placement:**  
+Require and create the logger at the top of each file that needs it. Call `debug('...')` wherever you want conditional debug output. No need to remove calls for production; just don’t set DEBUG.
+
+---
+
 ## Summary
 
 | Package | Type | Purpose | Installation |
@@ -7885,6 +10093,9 @@ npm install body-parser  # Only if using Express < 4.16.0
 | os | Built-in | Operating system utilities | No installation needed |
 | http | Built-in | HTTP server and client | No installation needed |
 | express-rate-limit | External | Rate limiting | `npm install express-rate-limit` |
+| morgan | External | HTTP request logging | `npm install morgan` |
+| config | External | Configuration by environment (config/ folder) | `npm install config` |
+| debug | External | Namespace-based debug logging (DEBUG env var) | `npm install debug` |
 | express.json() | Built-in (Express 4.16.0+) | JSON body parsing | No installation needed |
 | express.urlencoded() | Built-in (Express 4.16.0+) | Form data parsing | No installation needed |
 | body-parser | External (Deprecated) | Body parsing | Not recommended |
@@ -7899,6 +10110,9 @@ npm install body-parser  # Only if using Express < 4.16.0
 4. **CORS:** Configure CORS properly for production (don't allow all origins)
 5. **Database:** Use connection pooling and prepared statements with mysql2
 6. **Error Handling:** Always handle errors in async database operations
+7. **Logging:** Use morgan (or similar) for HTTP request logging in development; in production, stream logs to a file or log service
+8. **Configuration:** Use dotenv for secrets (API keys, passwords); use the config package for structured, environment-specific settings (port, hostnames, feature flags) when you have multiple environments
+9. **Debugging:** Use the debug package with namespaces (e.g. `myapp:db`, `myapp:auth`) for development; leave DEBUG unset in production so debug output is off
 
 ---
 
